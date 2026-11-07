@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="si">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ලංකා ගමන් සිතියම · Sri Lanka Travel Map</title>
+<meta name="description" content="ශ්‍රී ලංකාවේ සංචාරක ස්ථාන සහ ප්‍රාදේශීය කෑම හොයාගන්න නොමිලේ සිතියමක්. A free map of places to visit and local food across Sri Lanka.">
+<meta name="theme-color" content="#0E4D45">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/icon-192.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ගමන් සිතියම">
+<link rel="stylesheet" href="lib/leaflet.css">
+<link rel="stylesheet" href="lib/MarkerCluster.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Noto+Sans+Sinhala:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--teal:#0E4D45;--teal2:#14695E;--sand:#F6F1E7;--ink:#17201E;--muted:#5D6B67;--line:#E2E6E3;--bg:#FBFAF7;--accent:#E8A33A}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:"Noto Sans Sinhala",Manrope,system-ui,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+html[lang=en] body{font-family:Manrope,"Noto Sans Sinhala",system-ui,sans-serif}
+html[lang=ta] body{font-family:"Noto Sans Tamil",Manrope,system-ui,sans-serif}
+button,input,select{font-family:inherit}
+header{background:var(--teal);color:#fff;display:flex;align-items:center;gap:12px;padding:10px 18px;flex:none}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.brand>div{min-width:0}.brand b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand svg{flex:none}
+.brand b{display:block;font-size:18px;line-height:1.2}
+.brand small{display:block;font-size:12.5px;color:#BFE0D9;line-height:1.3}
+.hbtn{margin-left:auto;display:flex;align-items:center;gap:7px;border:0;background:rgba(255,255,255,.14);color:#fff;font-weight:700;font-size:13.5px;padding:8px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.hbtn .n{background:var(--accent);color:#2A1A00;border-radius:999px;min-width:20px;height:20px;display:grid;place-items:center;font-size:12px;padding:0 5px}
+.lang{display:flex;background:rgba(255,255,255,.12);border-radius:999px;padding:3px;flex:none}
+.lang button{border:0;background:none;color:#fff;font-weight:700;font-size:13px;padding:6px 10px;border-radius:999px;cursor:pointer;font-family:Manrope,"Noto Sans Sinhala","Noto Sans Tamil",sans-serif}
+.lang button.on{background:#fff;color:var(--teal)}
+main{flex:1;display:grid;grid-template-columns:420px minmax(0,1fr);min-height:0}
+aside{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;border-right:1px solid var(--line);background:#fff}
+.tools,.tools>*{min-width:0}
+.tools{padding:14px 16px 10px;border-bottom:1px solid var(--line);display:grid;gap:10px}
+.search{position:relative}
+.search input{width:100%;padding:12px 14px 12px 40px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;background:var(--bg)}
+.search input:focus{outline:none;border-color:var(--teal2);background:#fff}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{flex:none;display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--ink);white-space:nowrap}
+.chip i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.row{display:flex;gap:8px}
+.row select{flex:1;min-width:0;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font-size:14px;background:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:12px;padding:10px 14px;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;white-space:nowrap;min-width:0}
+.row .btn{flex:none;max-width:55%}.row .btn span{overflow:hidden;text-overflow:ellipsis}
+.pop .acts .btn{white-space:normal;text-align:center;line-height:1.25}
+html[lang=ta] .chip{font-size:12.5px;padding:6px 10px}html[lang=ta] .btn{font-size:13px}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-light{background:var(--sand);color:var(--teal)}
+.btn-amber{background:var(--accent);color:#2A1A00}
+.count{font-size:13px;color:var(--muted);padding:8px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
+.list{overflow-y:auto;flex:1}
+.card{display:flex;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);cursor:pointer;align-items:flex-start}
+.card:hover{background:var(--bg)}
+.card.sel{background:#EEF6F4;box-shadow:inset 3px 0 0 var(--teal2)}
+.dot{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:16px;color:#fff;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.card b{display:block;font-size:15px;line-height:1.35}
+.card .meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.card .side{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.card .km{font-size:12.5px;font-weight:700;color:var(--teal2);white-space:nowrap}
+.add{border:1.5px solid var(--line);background:#fff;border-radius:999px;width:30px;height:30px;font-size:16px;cursor:pointer;display:grid;place-items:center;color:var(--teal);flex:none}
+.add.in{background:var(--teal);border-color:var(--teal);color:#fff}
+.empty{padding:30px 16px;color:var(--muted);text-align:center}
+#map{min-height:0;height:100%;background:#CFE4EA}
+.dlabel span{display:block;text-align:center;font-size:11.5px;font-weight:700;color:#4E6A63;text-shadow:0 0 3px #F4F1E8,0 0 3px #F4F1E8;white-space:nowrap}
+.leaflet-container{font-family:inherit}
+.pin{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);transition:transform .15s;position:relative}
+.pin.sel{transform:scale(1.35);box-shadow:0 0 0 4px rgba(14,77,69,.35),0 2px 6px rgba(0,0,0,.35)}
+.pin .no{position:absolute;top:-8px;right:-8px;background:var(--accent);color:#2A1A00;font:800 11px Manrope,sans-serif;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;border:2px solid #fff}
+.clu{width:40px;height:40px;border-radius:50%;background:var(--teal);color:#fff;font:800 14px Manrope,sans-serif;display:grid;place-items:center;border:3px solid #fff;box-shadow:0 0 0 5px rgba(14,77,69,.25),0 2px 8px rgba(0,0,0,.3)}
+.clu.big{width:48px;height:48px;font-size:15px}
+.leaflet-popup-content{margin:14px 16px;min-width:230px;max-width:280px}
+.pop h3{font-size:16.5px;line-height:1.3;margin-bottom:2px}
+.pop .alt{font-size:12.5px;color:var(--muted)}
+.pop .tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;margin:8px 0 6px;padding:3px 9px;border-radius:999px;background:var(--sand)}
+.pop p{font-size:14px;line-height:1.55;margin:0 0 12px!important}
+.pop .acts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.month{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:12px;padding:0 0 0 12px;background:#fff}
+.month select{flex:1;min-width:0;border:0;padding:10px 12px 10px 0;font-size:14px;background:transparent;font-weight:600;color:var(--ink)}
+.month.on{border-color:var(--teal2);background:#EEF6F4}
+.season{margin:0 0 10px}
+.season small{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.mstrip{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
+.mstrip i{font-style:normal;font-size:9.5px;font-weight:700;text-align:center;padding:3px 0;border-radius:4px;background:#EEE9DF;color:#9A9384}
+.mstrip i.g{background:#1B9E77;color:#fff}
+.mstrip i.now{outline:2px solid var(--ink);outline-offset:-1px}
+.snote{font-size:12px;color:#8A5300;background:#FFF4DF;border-radius:8px;padding:5px 8px;margin-top:6px;line-height:1.45}
+.wx{margin:0 0 12px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;min-height:20px}
+.wx .days{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}
+.wx .days b{display:block;font-size:12px;color:var(--muted)}
+.wx .days .ic{font-size:20px;line-height:1.3}
+.wx .days .t{font-weight:800;font-size:13px}
+.wx .days .r{color:#2A6FDB;font-weight:700;font-size:11.5px}
+.wx .src{display:block;margin-top:6px;font-size:10.5px;color:var(--muted);text-align:right}
+.wx .src a{color:var(--muted)}
+.card .good{display:inline-block;font-size:11px;font-weight:700;color:#11694F;background:#E3F4EC;border-radius:999px;padding:1px 7px;margin-left:4px}
+.pop .acts .btn{padding:9px 8px;font-size:13px}
+.leaflet-container .pop a.btn-teal{color:#fff}.leaflet-container .pop a.btn-amber{color:#2A1A00}
+.me{width:18px;height:18px;border-radius:50%;background:#2A6FDB;border:3px solid #fff;box-shadow:0 0 0 6px rgba(42,111,219,.25)}
+.legend{background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 2px 10px rgba(0,0,0,.15);font-size:12.5px;line-height:1.9}
+.legend span{display:flex;align-items:center;gap:7px}
+.legend i{width:16px;height:16px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-style:normal;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+.note{font-size:11.5px;color:var(--muted);padding:10px 16px;border-top:1px solid var(--line);line-height:1.5;background:#fff}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;z-index:3000;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+/* trip drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,20,18,.4);z-index:1500;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.open{opacity:1;pointer-events:auto}
+.trip{position:fixed;top:0;right:0;bottom:0;width:390px;max-width:100%;background:#fff;z-index:1600;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;box-shadow:-10px 0 30px rgba(0,0,0,.15)}
+.trip.open{transform:none}
+.trip-h{display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid var(--line)}
+.trip-h b{font-size:18px}
+.trip-h button{margin-left:auto;border:0;background:none;font-size:26px;cursor:pointer;color:var(--muted);line-height:1}
+.trip-list{flex:1;overflow-y:auto}
+.tl{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.tl .num{width:26px;height:26px;border-radius:50%;background:var(--accent);font:800 13px Manrope,sans-serif;display:grid;place-items:center;flex:none}
+.tl .nm{flex:1;min-width:0}.tl .nm b{display:block;font-size:14.5px;line-height:1.35}.tl .nm small{color:var(--muted);font-size:12px}
+.tl .ctl{display:flex;gap:4px}
+.tl .ctl button{border:1.5px solid var(--line);background:#fff;border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:14px;color:var(--ink)}
+.tl .ctl button:disabled{opacity:.35;cursor:default}
+.trip-f{padding:14px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:grid;gap:8px}
+.trip-f p{font-size:12px;color:var(--muted);line-height:1.5}
+.trip-empty{padding:30px 20px;color:var(--muted);text-align:center;line-height:1.6}
+/* install */
+.inst{position:fixed;left:16px;bottom:16px;z-index:1400;display:none;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:10px 12px;box-shadow:0 12px 34px rgba(0,0,0,.25);max-width:420px;width:calc(100% - 32px)}
+.inst.show{display:flex}
+.inst img{border-radius:10px;flex:none}
+.inst div{flex:1;min-width:0}.inst b{display:block;font-size:14.5px}.inst small{display:block;color:var(--muted);font-size:12px;line-height:1.4}
+.inst .x{background:none;border:0;font-size:22px;color:var(--muted);cursor:pointer}
+.inst.ios #inst_go{display:none}
+/* photos */
+.photo{margin:-14px -16px 10px;height:150px;background:#E9E5DC;border-radius:12px 12px 0 0;overflow:hidden;position:relative}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo a.cr{position:absolute;right:6px;bottom:6px;font-size:10px;background:rgba(0,0,0,.55);color:#fff!important;padding:2px 6px;border-radius:6px;text-decoration:none}
+.photo.none{display:none}
+.leaflet-popup-content-wrapper{overflow:hidden}
+.vbtn{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 10px;font-weight:700;font-size:12.5px;cursor:pointer;margin:0 0 10px;color:var(--ink)}
+.vbtn.on{background:#FFF4DF;border-color:#E8A33A;color:#7A4B00}
+.card .star{font-size:13px;margin-left:4px}
+/* visited */
+.vis-top{padding:16px;border-bottom:1px solid var(--line)}
+.vis-big{display:flex;align-items:baseline;gap:8px}.vis-big b{font:800 36px Manrope,sans-serif;color:var(--teal)}.vis-big span{color:var(--muted);font-weight:600}
+.bar{height:10px;background:var(--sand);border-radius:99px;overflow:hidden;margin:10px 0 12px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#1B9E77,#E8A33A);border-radius:99px;transition:width .4s}
+.vis-cats{display:flex;flex-wrap:wrap;gap:6px}
+.vis-cats span{font-size:12.5px;font-weight:700;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:4px 9px}
+/* railways */
+.rail-btn{background:#fff;border:0;width:34px;height:34px;border-radius:8px;font-size:18px;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.25)}
+.rail-btn.on{background:var(--teal);color:#fff}
+.stn{width:10px;height:10px;border-radius:50%;background:#fff;border:2.5px solid #333}
+.rail-pop h3{font-size:16px;margin-bottom:6px}.rail-pop p{font-size:13.5px;line-height:1.55;margin:0 0 8px!important}.rail-pop small{color:var(--muted);font-size:11.5px}
+/* more places (OpenStreetMap) */
+.more-btn{background:#fff;border:0;border-radius:999px;padding:8px 13px;font:700 13px inherit;font-family:inherit;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.28);color:var(--teal);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.more-btn.off{color:#8B9692}
+.more-btn.busy{opacity:.75;cursor:progress}
+.more-wrap{display:flex;gap:6px}
+.more-x{background:#fff;border:0;border-radius:999px;width:34px;font-size:15px;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.28);color:var(--muted)}
+.opin{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;background:#fff;border:2px solid;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.oclu{width:30px;height:30px;border-radius:50%;background:#fff;color:#5D6B67;font:800 12px Manrope,sans-serif;display:grid;place-items:center;border:2px solid #9AA8A3;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.pop .osm-note{font-size:11.5px;color:var(--muted);background:var(--bg);border-radius:8px;padding:6px 8px;margin:6px 0 10px;line-height:1.45}
+.pop .osm-note a{color:var(--teal2)}
+/* SOS */
+.sos-ctl{background:#C62828;color:#fff;border:3px solid #fff;width:52px;height:52px;border-radius:50%;font:800 14px Manrope,sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(198,40,40,.45)}
+.sos-sheet{position:fixed;inset:0;z-index:2500;background:rgba(10,20,18,.55);display:none;align-items:flex-end;justify-content:center}
+.sos-sheet.open{display:flex}
+.sos-box{background:#fff;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;border-radius:22px 22px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom))}
+@media (min-width:821px){.sos-sheet{align-items:center}.sos-box{border-radius:22px}}
+.sos-h{display:flex;align-items:center;margin-bottom:10px}.sos-h b{font-size:18px;color:#B3261E}
+.sos-h button{margin-left:auto;border:0;background:none;font-size:28px;cursor:pointer;color:var(--muted);line-height:1}
+.sos-row{display:flex;align-items:center;gap:12px;width:100%;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:11px 14px;margin-bottom:8px;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink)}
+.sos-row:hover{border-color:#C62828}
+.sos-row .ic{font-size:22px;width:30px;text-align:center}
+.sos-row .nm{flex:1;font-weight:700;font-size:14.5px;line-height:1.35}.sos-row .nm small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.sos-row .no{font:800 20px Manrope,sans-serif;color:#B3261E}
+.sos-links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 6px}
+.sos-links .btn{white-space:normal;line-height:1.3;text-align:center}
+.sos-confirm{text-align:center;padding:6px 4px}
+.sc-num{font:800 52px Manrope,sans-serif;color:#B3261E;line-height:1.1}
+.sc-name{font-weight:700;font-size:16px;margin:4px 0 18px}
+.hold{position:relative;overflow:hidden;width:100%;border:0;border-radius:16px;background:#C62828;color:#fff;font-weight:800;font-size:18px;padding:20px 12px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none;font-family:inherit}
+.hold i{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,255,255,.28)}
+.hold span{position:relative}
+.sc-help{font-size:13px;color:var(--muted);margin:10px 0 14px;line-height:1.5}
+.sos-confirm .btn{width:100%}
+.sos-note{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:8px}
+@media (max-width:820px){
+  body{display:block;height:auto}
+  header{position:sticky;top:0;z-index:1200;padding:8px 12px;gap:8px}
+  main{display:flex;flex-direction:column}
+  #map{height:52vh;order:1;position:sticky;top:54px;z-index:1}
+  aside{order:2;border-right:0}
+  .list{overflow:visible}
+  .brand small{display:none}.brand b{font-size:15.5px}
+  .hbtn{padding:7px 9px}.hbtn .lbl{display:none}
+  .photo{height:120px}
+  #map:has(.leaflet-popup) .more-wrap,#map:has(.leaflet-popup) .rail-btn,#map:has(.leaflet-popup) .leaflet-control-zoom{visibility:hidden}
+}
+@media (max-width:480px){
+  .brand>div{display:none}
+  .lang button{padding:6px 8px;font-size:12px}
+  .leaflet-control.legend{display:none}
+  .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .chips::-webkit-scrollbar{display:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="17" fill="#fff"/><path d="M17 7c-4 0-7 3-7 7 0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" fill="#0E4D45"/><circle cx="17" cy="14" r="2.8" fill="#E8A33A"/></svg>
+    <div><b data-i="title"></b><small data-i="sub"></small></div>
+  </div>
+  <button class="hbtn" id="visBtn">⭐ <span class="lbl" data-i="visited"></span><span class="n" id="visN">0</span></button>
+  <button class="hbtn" id="tripBtn" style="margin-left:0">🧳 <span class="lbl" data-i="trip"></span><span class="n" id="tripN">0</span></button>
+  <div class="lang"><button data-l="si">සිං</button><button data-l="ta">தமிழ்</button><button data-l="en">EN</button></div>
+</header>
+<main>
+  <aside>
+    <div class="tools">
+      <label class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5D6B67" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="q" type="search" autocomplete="off"></label>
+      <div class="chips" id="chips"></div>
+      <div class="row">
+        <select id="dist" aria-label="District"></select>
+        <button class="btn btn-teal" id="near"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7"/></svg><span data-i="near"></span></button>
+      </div>
+      <label class="month"><span>🗓</span><select id="month" aria-label="Month"></select></label>
+      <a class="btn btn-amber" id="foodNear" target="_blank" rel="noopener">🍛 <span data-i="foodnear"></span></a>
+    </div>
+    <div class="count"><span id="count"></span><a href="#" id="reset" style="color:var(--teal2);font-weight:700;text-decoration:none" data-i="reset"></a></div>
+    <div class="list" id="list"></div>
+    <div class="note"><span data-i="note"></span> <a href="#" id="instLink" hidden style="color:var(--teal2);font-weight:700" data-i="install"></a></div>
+  </aside>
+  <div id="map" role="application" aria-label="Map of Sri Lanka"></div>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<section class="trip" id="trip" aria-label="My trip">
+  <div class="trip-h">🧳 <b data-i="trip"></b><button id="tripClose" aria-label="Close">×</button></div>
+  <div class="trip-list" id="tripList"></div>
+  <div class="trip-f" id="tripF">
+    <a class="btn btn-teal" id="tripRoute" target="_blank" rel="noopener" data-i="route"></a>
+    <div class="row"><button class="btn btn-light" style="flex:1" id="tripShare" data-i="tshare"></button><button class="btn btn-light" style="flex:1" id="tripShow" data-i="tshow"></button></div>
+    <button class="btn" style="color:#B3261E;background:none" id="tripClear" data-i="tclear"></button>
+    <p data-i="tnote"></p>
+  </div>
+</section>
+
+<section class="trip" id="vis" aria-label="Places I've been">
+  <div class="trip-h">⭐ <b data-i="visited"></b><button id="visClose" aria-label="Close">×</button></div>
+  <div class="vis-top">
+    <div class="vis-big"><b id="visPct">0</b><span id="visOf"></span></div>
+    <div class="bar"><i id="visBar"></i></div>
+    <div class="vis-cats" id="visCats"></div>
+  </div>
+  <div class="trip-list" id="visList"></div>
+  <div class="trip-f"><button class="btn btn-teal" id="visShare" data-i="vshare"></button><p data-i="vnote"></p></div>
+</section>
+
+<!-- emergency -->
+<div class="sos-sheet" id="sos" role="dialog" aria-modal="true" aria-labelledby="sosTitle">
+  <div class="sos-box">
+    <div class="sos-h"><b id="sosTitle">🆘 <span data-i="sos"></span></b><button id="sosClose" aria-label="Close">×</button></div>
+    <div id="sosList"></div>
+    <div id="sosConfirm" class="sos-confirm" hidden>
+      <div class="sc-num" id="scNum"></div>
+      <div class="sc-name" id="scName"></div>
+      <button class="hold" id="holdBtn"><i id="holdFill"></i><span id="holdTxt"></span></button>
+      <p class="sc-help" data-i="holdhelp"></p>
+      <button class="btn btn-light" id="scBack" data-i="cancel"></button>
+    </div>
+  </div>
+</div>
+
+<div class="inst" id="inst" role="dialog">
+  <img src="img/icon-192.png" width="44" height="44" alt="">
+  <div><b data-i="i_t"></b><small id="inst_s" data-i="i_s"></small></div>
+  <button class="btn btn-amber" id="inst_go" data-i="i_btn"></button>
+  <button class="x" id="inst_x" aria-label="Close">×</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="lib/leaflet.js"></script>
+<script src="lib/leaflet.markercluster.js"></script>
+<script src="data.js"></script>
+<script>
+const CATS = {
+  heritage:{c:"#E07A1F", e:"🏛", si:"උරුම", ta:"மரபுரிமை", en:"Heritage"},
+  temple:  {c:"#C9A100", e:"🙏", si:"පූජනීය", ta:"புனிதத் தலங்கள்", en:"Sacred"},
+  nature:  {c:"#1B9E77", e:"🌿", si:"සොබාදහම", ta:"இயற்கை", en:"Nature"},
+  beach:   {c:"#2A6FDB", e:"🏖", si:"වෙරළ", ta:"கடற்கரைகள்", en:"Beaches"},
+  wildlife:{c:"#7A5AE0", e:"🐘", si:"වනජීවී", ta:"வனவிலங்கு", en:"Wildlife"},
+  hike:    {c:"#C2378A", e:"⛰", si:"කඳු නැගීම", ta:"மலையேற்றம்", en:"Hikes & views"},
+  food:    {c:"#D2443A", e:"🍛", si:"ප්‍රාදේශීය කෑම", ta:"உள்ளூர் உணவு", en:"Local food"},
+};
+const DN = {
+ si:{Ampara:"අම්පාර",Anuradhapura:"අනුරාධපුරය",Badulla:"බදුල්ල",Batticaloa:"මඩකලපුව",Colombo:"කොළඹ",Galle:"ගාල්ල",Gampaha:"ගම්පහ",Hambantota:"හම්බන්තොට",Jaffna:"යාපනය",Kalutara:"කළුතර",Kandy:"මහනුවර",Kegalle:"කෑගල්ල",Kilinochchi:"කිලිනොච්චිය",Kurunegala:"කුරුණෑගල",Mannar:"මන්නාරම",Matale:"මාතලේ",Matara:"මාතර",Monaragala:"මොණරාගල",Mullaitivu:"මුලතිව්","Nuwara Eliya":"නුවරඑළිය",Polonnaruwa:"පොළොන්නරුව",Puttalam:"පුත්තලම",Ratnapura:"රත්නපුරය",Trincomalee:"ත්‍රිකුණාමලය",Vavuniya:"වව්නියාව"},
+ ta:{Ampara:"அம்பாறை",Anuradhapura:"அனுராதபுரம்",Badulla:"பதுளை",Batticaloa:"மட்டக்களப்பு",Colombo:"கொழும்பு",Galle:"காலி",Gampaha:"கம்பஹா",Hambantota:"அம்பாந்தோட்டை",Jaffna:"யாழ்ப்பாணம்",Kalutara:"களுத்துறை",Kandy:"கண்டி",Kegalle:"கேகாலை",Kilinochchi:"கிளிநொச்சி",Kurunegala:"குருணாகல்",Mannar:"மன்னார்",Matale:"மாத்தளை",Matara:"மாத்தறை",Monaragala:"மொனராகலை",Mullaitivu:"முல்லைத்தீவு","Nuwara Eliya":"நுவரெலியா",Polonnaruwa:"பொலன்னறுவை",Puttalam:"புத்தளம்",Ratnapura:"இரத்தினபுரி",Trincomalee:"திருகோணமலை",Vavuniya:"வவுனியா"}
+};
+const T = {
+  si:{osmbtn:"මෙතන තව තැන්", osmzoomshort:"තව තැන් බලන්න zoom කරන්න", osmzoom:"තව තැන් පෙන්වන්න සිතියම තව ටිකක් zoom කරන්න.", osmload:"සොයමින්…", osmfail:"තැන් ලබාගන්න බැරි වුණා. ටිකකින් නැවත උත්සාහ කරන්න.", osmsame:"මේ ප්‍රදේශයේ තැන් දැනටමත් පෙන්වනවා. සිතියම වෙනත් තැනකට ගෙනිහින් ආයෙ ඔබන්න.", osmfound:n=>`තව තැන් ${n}ක් හම්බුණා`, osmnone:"මේ ප්‍රදේශයේ අලුත් තැන් හම්බුණේ නැහැ.", osmnote:"මෙම තොරතුරු OpenStreetMap ප්‍රජාවෙන්. අප පරීක්ෂා කර නැහැ.", osmsrc:"OpenStreetMap", visited:"මම ගිය තැන්", vyes:"⭐ මම ගියා", vno:"☆ මම ගියා නම් ලකුණු කරන්න", vof:(n,f,fn)=>`/ තැන් ${n} · රස බැලූ කෑම ${f}/${fn}`, vempty:"තාම ලකුණු කළ තැන් නැහැ. ස්ථානයක් එබුවම \"☆ මම ගියා\" ඔබන්න.", vshare:"🔗 මගේ ලකුණු බෙදාගන්න", vnote:"මේ ලැයිස්තුව ඔබේ phone එකේ පමණක් ගබඩා වෙනවා.", vtext:(n,t)=>`මම ලංකාවේ තැන් ${t}න් ${n}කට ගිහින්! 🇱🇰 ඔයා කීයකට ගිහින්ද?`, photo:"Wikimedia", railon:"ලස්සන දුම්රිය මාර්ග පෙන්වනවා. ඉරක් එබුවම විස්තර පේනවා.", railnote:"මාර්ගය දළ වශයෙන් (දුම්රියපොළවල් අතර) දක්වා ඇත. දුම්රිය වේලාවන් සහ ටිකට් ශ්‍රී ලංකා දුම්රිය සේවයෙන් පරීක්ෂා කරන්න.", sos:"හදිසි අවස්ථා", tapcall:"අමතන්න ඔබන්න", hosp:"ළඟම රෝහල", pol:"ළඟම පොලිසිය", myloc:"මම ඉන්න තැන යවන්න", mylocmsg:"මම දැන් ඉන්නේ මෙතැන:", hold:"📞 අමතන්න ඔබාගෙන ඉන්න", holding:"දිගටම ඔබාගෙන ඉන්න…", calling:"අමතමින්", holdhelp:"වැරදිලාවත් call එකක් නොයන්න, බොත්තම තත්පරයක් පමණ ඔබාගෙන ඉන්න.", cancel:"අවලංගු කරන්න", sosnote:"අංක ශ්‍රී ලංකා පොලිසිය සහ නිල මූලාශ්‍ර අනුව. හදිසි අවස්ථාවකදී මුලින්ම 119 හෝ 1990 අමතන්න.", best:"යන්න හොඳම කාලය", allyear:"අවුරුද්ද පුරාම", anym:"ඕනෑම මාසයක", goin:"යන්නේ:", thism:"මේ මාසය", wxload:"කාලගුණය ලබාගනිමින්…", wxfail:"කාලගුණය ලබාගන්න බැරි වුණා (internet අවශ්‍යයි).", wxsrc:"කාලගුණ දත්ත:", today:"අද", tomorrow:"හෙට", title:"ලංකා ගමන් සිතියම", sub:"සංචාරක ස්ථාන සහ ප්‍රාදේශීය කෑම, එකම සිතියමක", q:"ස්ථානයක් හොයන්න… (උදා: සීගිරිය, ඇල්ල)", all:"සියල්ල", alld:"සියලු දිස්ත්‍රික්ක",
+      near:"මට ළඟම", foodnear:"මට ළඟම කෑම කඩ හොයන්න", reset:"සියල්ල පෙන්වන්න", count:n=>`ස්ථාන ${n}ක්`, empty:"ගැලපෙන ස්ථාන නැහැ. වෙනත් වචනයක් හෝ කාණ්ඩයක් උත්සාහ කරන්න.",
+      dir:"📍 මඟ පෙන්වීම", food:"🍛 ළඟ කෑම කඩ", share:"🔗 බෙදාගන්න", add:"➕ ගමනට එක් කරන්න", added:"✓ ගමනේ තියෙනවා", copied:"Link එක copy කළා",
+      locating:"ඔබ සිටින තැන සොයමින්…", locfail:"ඔබ සිටින තැන ගන්න බැරි වුණා. Phone එකේ location on කරලා නැවත උත්සාහ කරන්න.", you:"ඔබ මෙතැන", km:"කි.මී.",
+      note:"\"යන්න හොඳම කාලය\" මෝසම් අනුව දළ මඟපෙන්වීමක් පමණයි; කාලගුණය අවුරුද්දෙන් අවුරුද්දට වෙනස් වෙනවා. ස්ථානවල පිහිටීම දළ වශයෙන් දක්වා ඇත. යන්න කලින් විවෘත වේලාවන් සහ ප්‍රවේශ ගාස්තු පරීක්ෂා කරන්න. \"මඟ පෙන්වීම\" Google Maps හරහා නිවැරදි ස්ථානයට ගෙන යයි.",
+      trip:"මගේ ගමන", route:"🗺 සම්පූර්ණ මාර්ගය Google Maps එකේ", tshare:"🔗 ගමන බෙදාගන්න", tshow:"🗺 සිතියමේ පෙන්වන්න", tclear:"ගමන මකන්න",
+      tnote:"මාර්ගය ඔබ සිටින තැන සිට, මෙහි පිළිවෙළට සකස් වෙනවා. Google Maps එකට එකවර ස්ථාන 10ක් දක්වා යවන්න පුළුවන්.", tempty:"තාම ස්ථාන නැහැ. ස්ථානයක් ළඟ ඇති ➕ බොත්තම ඔබලා ඔබේ ගමනට එකතු කරන්න.",
+      tadded:"ගමනට එකතු කළා", tremoved:"ගමනින් ඉවත් කළා", tmax:"Google Maps මාර්ගයට ස්ථාන 10ක් දක්වා පමණයි. පළමු 10 යවනවා.", tshared:"බෙදාගත් ගමනක් පූරණය කළා", tconfirm:"ගමනේ සියලු ස්ථාන මකන්නද?",
+      up:"ඉහළට", down:"පහළට", rm:"ඉවත් කරන්න",
+      i_t:"ගමන් සිතියම app එක ගන්න", i_s:"Phone home screen එකට එකතු කරන්න. Internet නැති වෙලාවකත් විවෘත වෙනවා.", i_btn:"Install", install:"📲 App එක install කරන්න", i_ios:"Share බොත්තම ඔබලා “Add to Home Screen” තෝරන්න."},
+  ta:{osmbtn:"இங்கே மேலும் இடங்கள்", osmzoomshort:"மேலும் இடங்களுக்கு பெரிதாக்கவும்", osmzoom:"மேலும் இடங்களைக் காட்ட வரைபடத்தை இன்னும் பெரிதாக்கவும்.", osmload:"தேடுகிறது…", osmfail:"இடங்களைப் பெற முடியவில்லை. சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.", osmsame:"இந்தப் பகுதியின் இடங்கள் ஏற்கனவே காட்டப்படுகின்றன. வரைபடத்தை வேறு இடத்துக்கு நகர்த்தி மீண்டும் அழுத்துங்கள்.", osmfound:n=>`மேலும் ${n} இடங்கள் கிடைத்தன`, osmnone:"இந்தப் பகுதியில் புதிய இடங்கள் இல்லை.", osmnote:"இந்தத் தகவல் OpenStreetMap சமூகத்திலிருந்து. நாங்கள் சரிபார்க்கவில்லை.", osmsrc:"OpenStreetMap", visited:"நான் சென்ற இடங்கள்", vyes:"⭐ சென்றுள்ளேன்", vno:"☆ சென்றிருந்தால் குறியிடுங்கள்", vof:(n,f,fn)=>`/ ${n} இடங்கள் · ${f}/${fn} உணவுகள் சுவைத்தேன்`, vempty:"இன்னும் குறியிட்ட இடங்கள் இல்லை. ஒரு இடத்தைத் தட்டி \"☆ சென்றிருந்தால் குறியிடுங்கள்\" அழுத்துங்கள்.", vshare:"🔗 என் மதிப்பெண்ணைப் பகிர்", vnote:"இந்தப் பட்டியல் உங்கள் போனில் மட்டுமே சேமிக்கப்படும்.", vtext:(n,t)=>`இலங்கையின் ${t} இடங்களில் ${n} இடங்களுக்குச் சென்றுள்ளேன்! 🇱🇰 நீங்கள் எத்தனைக்கு?`, photo:"Wikimedia", railon:"அழகிய ரயில் பாதைகள் காட்டப்படுகின்றன. ஒரு கோட்டைத் தட்டினால் விவரம் தெரியும்.", railnote:"பாதை நிலையங்களுக்கு இடையே தோராயமாகக் காட்டப்பட்டுள்ளது. ரயில் நேரங்களையும் டிக்கெட்டுகளையும் இலங்கை ரயில்வேயிடம் சரிபார்க்கவும்.", sos:"அவசர உதவி", tapcall:"அழைக்கத் தட்டுங்கள்", hosp:"அருகிலுள்ள மருத்துவமனை", pol:"அருகிலுள்ள காவல் நிலையம்", myloc:"என் இருப்பிடத்தை அனுப்பு", mylocmsg:"நான் இப்போது இங்கே இருக்கிறேன்:", hold:"📞 அழைக்க அழுத்திப் பிடியுங்கள்", holding:"தொடர்ந்து அழுத்திப் பிடியுங்கள்…", calling:"அழைக்கிறது", holdhelp:"தவறுதலாக அழைப்பு போகாமல் இருக்க, பொத்தானை ஒரு வினாடி அழுத்திப் பிடியுங்கள்.", cancel:"ரத்து செய்", sosnote:"எண்கள் இலங்கை காவல்துறை மற்றும் உத்தியோகபூர்வ மூலங்களின்படி. அவசரத்தில் முதலில் 119 அல்லது 1990 ஐ அழையுங்கள்.", best:"செல்ல சிறந்த காலம்", allyear:"ஆண்டு முழுவதும்", anym:"எந்த மாதமும்", goin:"பயணம்:", thism:"இந்த மாதம்", wxload:"வானிலை ஏற்றப்படுகிறது…", wxfail:"வானிலையைப் பெற முடியவில்லை (இணையம் தேவை).", wxsrc:"வானிலைத் தரவு:", today:"இன்று", tomorrow:"நாளை", title:"இலங்கை பயண வரைபடம்", sub:"சுற்றுலா இடங்களும் உள்ளூர் உணவும், ஒரே வரைபடத்தில்", q:"ஒரு இடத்தைத் தேடுங்கள்… (உ.தா: சீகிரியா, எல்ல)", all:"அனைத்தும்", alld:"அனைத்து மாவட்டங்களும்",
+      near:"எனக்கு அருகில்", foodnear:"எனக்கு அருகிலுள்ள உணவகங்கள்", reset:"அனைத்தையும் காட்டு", count:n=>`${n} இடங்கள்`, empty:"பொருந்தும் இடங்கள் இல்லை. வேறு சொல் அல்லது வகையை முயற்சிக்கவும்.",
+      dir:"📍 வழி காட்டல்", food:"🍛 அருகில் உணவு", share:"🔗 பகிருங்கள்", add:"➕ பயணத்தில் சேர்", added:"✓ பயணத்தில் உள்ளது", copied:"இணைப்பு நகலெடுக்கப்பட்டது",
+      locating:"உங்கள் இருப்பிடத்தைத் தேடுகிறது…", locfail:"உங்கள் இருப்பிடத்தைப் பெற முடியவில்லை. இருப்பிடத்தை இயக்கி மீண்டும் முயற்சிக்கவும்.", you:"நீங்கள் இங்கே", km:"கி.மீ.",
+      note:"\"செல்ல சிறந்த காலம்\" பருவமழை அடிப்படையிலான தோராயமான வழிகாட்டி மட்டுமே; வானிலை ஆண்டுக்கு ஆண்டு மாறும். இடங்களின் அமைவிடம் தோராயமானது. செல்வதற்கு முன் திறக்கும் நேரங்களையும் நுழைவுக் கட்டணங்களையும் சரிபார்க்கவும். \"வழி காட்டல்\" Google Maps மூலம் சரியான இடத்துக்கு அழைத்துச் செல்லும்.",
+      trip:"என் பயணம்", route:"🗺 முழு வழியும் Google Maps இல்", tshare:"🔗 பயணத்தைப் பகிர்", tshow:"🗺 வரைபடத்தில் காட்டு", tclear:"பயணத்தை அழி",
+      tnote:"வழி உங்கள் இருப்பிடத்திலிருந்து, இங்குள்ள வரிசைப்படி அமையும். Google Maps க்கு ஒரே நேரத்தில் 10 இடங்கள் வரை அனுப்பலாம்.", tempty:"இன்னும் இடங்கள் இல்லை. ஒரு இடத்துக்கு அருகிலுள்ள ➕ பொத்தானைத் தட்டி உங்கள் பயணத்தில் சேர்க்கவும்.",
+      tadded:"பயணத்தில் சேர்க்கப்பட்டது", tremoved:"பயணத்திலிருந்து நீக்கப்பட்டது", tmax:"Google Maps வழிக்கு 10 இடங்கள் வரை மட்டுமே. முதல் 10 அனுப்பப்படும்.", tshared:"பகிரப்பட்ட பயணம் ஏற்றப்பட்டது", tconfirm:"பயணத்திலுள்ள அனைத்து இடங்களையும் அழிக்கவா?",
+      up:"மேலே", down:"கீழே", rm:"நீக்கு",
+      i_t:"பயண வரைபட ஆப்பைப் பெறுங்கள்", i_s:"போனின் முகப்புத் திரையில் சேர்க்கவும். இணையம் இல்லாதபோதும் திறக்கும்.", i_btn:"நிறுவு", install:"📲 ஆப்பை நிறுவுங்கள்", i_ios:"Share பொத்தானைத் தட்டி “Add to Home Screen” தேர்ந்தெடுங்கள்."},
+  en:{osmbtn:"More places here", osmzoomshort:"Zoom in for more places", osmzoom:"Zoom in a bit more to show more places.", osmload:"Searching…", osmfail:"Couldn't load places. Please try again in a moment.", osmsame:"Places for this area are already shown. Move the map somewhere else and tap again.", osmfound:n=>`Found ${n} more places`, osmnone:"No new places found in this area.", osmnote:"This information comes from the OpenStreetMap community. We haven't checked it.", osmsrc:"OpenStreetMap", visited:"Places I've been", vyes:"⭐ I've been here", vno:"☆ Mark as visited", vof:(n,f,fn)=>`of ${n} places · tasted ${f}/${fn} foods`, vempty:"Nothing marked yet. Tap a place, then \"☆ Mark as visited\".", vshare:"🔗 Share my score", vnote:"This list is saved only on your phone.", vtext:(n,t)=>`I've been to ${n} of ${t} places in Sri Lanka! 🇱🇰 How many have you seen?`, photo:"Wikimedia", railon:"Showing scenic railways. Tap a line for details.", railnote:"Lines are drawn approximately between stations. Check train times and tickets with Sri Lanka Railways.", sos:"Emergency", tapcall:"Tap to call", hosp:"Nearest hospital", pol:"Nearest police station", myloc:"Send my location", mylocmsg:"I am here right now:", hold:"📞 Press and hold to call", holding:"Keep holding…", calling:"Calling", holdhelp:"To stop accidental calls, press and hold the button for about one second.", cancel:"Cancel", sosnote:"Numbers from Sri Lanka Police and official sources. In an emergency, call 119 or 1990 first.", best:"Best time to go", allyear:"All year", anym:"Any month", goin:"Going in", thism:"this month", wxload:"Loading weather…", wxfail:"Couldn't load the weather (needs internet).", wxsrc:"Weather data by", today:"Today", tomorrow:"Tomorrow", title:"Sri Lanka Travel Map", sub:"Places to visit and local food, on one map", q:"Search a place… (e.g. Sigiriya, Ella)", all:"All", alld:"All districts",
+      near:"Near me", foodnear:"Find food near me", reset:"Show all", count:n=>`${n} places`, empty:"No matching places. Try another word or category.",
+      dir:"📍 Directions", food:"🍛 Food nearby", share:"🔗 Share", add:"➕ Add to trip", added:"✓ In your trip", copied:"Link copied",
+      locating:"Finding your location…", locfail:"Couldn't get your location. Turn on location and try again.", you:"You are here", km:"km",
+      note:"\"Best time to go\" is a rough monsoon-based guide; weather varies from year to year. Locations are approximate. Check opening times and entry fees before you go. \"Directions\" takes you to the exact place in Google Maps.",
+      trip:"My trip", route:"🗺 Full route in Google Maps", tshare:"🔗 Share trip", tshow:"🗺 Show on map", tclear:"Clear trip",
+      tnote:"The route starts from your location and follows this order. Google Maps takes up to 10 stops at a time.", tempty:"No places yet. Tap ➕ next to a place to add it to your trip.",
+      tadded:"Added to your trip", tremoved:"Removed from your trip", tmax:"Google Maps routes take up to 10 stops. Sending the first 10.", tshared:"Shared trip loaded", tconfirm:"Remove all places from your trip?",
+      up:"Move up", down:"Move down", rm:"Remove",
+      i_t:"Get the Travel Map app", i_s:"Add it to your home screen. Opens even without internet.", i_btn:"Install", install:"📲 Install the app", i_ios:"Tap the Share button, then “Add to Home Screen”."}
+};
+let lang = "si", cat = "all", dist = "", q = "", me = null, selId = null, month = 0;
+const $ = id => document.getElementById(id);
+const store = { get:k=>{try{return localStorage.getItem(k)}catch(e){return null}}, set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}} };
+const BY = Object.fromEntries(PLACES.map(p => [p.id, p]));
+const name = p => p[lang];
+const alt = p => lang === "en" ? p.si : p.en;
+const desc = p => ({si:p.dsi, ta:p.dta, en:p.den})[lang];
+const dname = d => lang === "en" ? d : (DN[lang][d] || d);
+const gq = p => p.osm ? `${p.lat},${p.lng}` : encodeURIComponent(p.c === "food" ? `${p.en}, ${p.d}, Sri Lanka` : `${p.en}, Sri Lanka`);
+function getP(id){
+  if (BY[id]) return BY[id];
+  if (!id || !id.startsWith("o|")) return null;
+  const [, oid, lat, lng, nm, c, ic] = id.split("|");
+  if (!oid || isNaN(+lat) || isNaN(+lng)) return null;
+  const n = decodeURIComponent(nm || "");
+  return {id, osm:oid, lat:+lat, lng:+lng, si:n, ta:n, en:n, c:CATS[c] ? c : "heritage", ic:decodeURIComponent(ic || "📍")};
+}
+function toast(t){ const el = $("toast"); el.textContent = t; el.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("show"), 2600); }
+
+// ---------------- photos (Wikipedia / Wikimedia Commons, free-licence images only) ----------------
+const WIKI = {"sri-maha-bodhi": "Jaya Sri Maha Bodhi", "ruwanwelisaya": "Ruwanwelisaya", "jetavanaramaya": "Jetavanaramaya", "mihintale": "Mihintale", "gal-vihara": "Gal Vihara", "parakrama-samudra": "Parakrama Samudra", "minneriya": "Minneriya National Park", "sigiriya": "Sigiriya", "pidurangala": "Pidurangala Rock", "dambulla": "Dambulla cave temple", "aluvihare": "Aluvihare Rock Temple", "nalanda-gedige": "Nalanda Gedige", "riverston": "Knuckles Mountain Range", "dalada-maligawa": "Temple of the Tooth", "peradeniya": "Royal Botanical Gardens, Peradeniya", "embekke": "Embekka Devalaya", "hanthana": "Hantana Mountain Range", "horton-plains": "Horton Plains National Park", "gregory-lake": "Lake Gregory", "hakgala": "Hakgala Botanical Garden", "ramboda": "Ramboda Falls", "devon-falls": "Devon Falls", "sri-pada": "Adam's Peak", "ella-rock": "Ella, Sri Lanka", "little-adams-peak": "Little Adam's Peak", "nine-arch": "Nine Arch Bridge", "ravana-falls": "Ravana Falls", "dunhinda": "Dunhinda Falls", "liptons-seat": "Lipton's Seat", "buduruwagala": "Buduruwagala", "maligawila": "Maligawila", "yala": "Yala National Park", "kataragama": "Kataragama temple", "bundala": "Bundala National Park", "tissa": "Tissamaharama", "udawalawe": "Udawalawe National Park", "sinharaja": "Sinharaja Forest Reserve", "maha-saman": "Maha Saman Devalaya", "bopath-ella": "Bopath Ella Falls", "mirissa": "Mirissa", "dondra": "Dondra Head Lighthouse", "galle-fort": "Galle Fort", "unawatuna": "Unawatuna", "peace-pagoda": "Japanese Peace Pagoda, Unawatuna", "hikkaduwa": "Hikkaduwa", "kanneliya": "Kanneliya Forest Reserve", "bentota": "Bentota", "kalutara-bodhiya": "Kalutara Bodhiya", "galle-face": "Galle Face Green", "gangaramaya": "Gangaramaya Temple", "lotus-tower": "Lotus Tower", "national-museum": "Colombo National Museum", "kelaniya": "Kelaniya Raja Maha Vihara", "negombo": "Negombo", "henarathgoda": "Henarathgoda Botanical Garden", "pinnawala": "Pinnawala Elephant Orphanage", "kitulgala": "Kitulgala", "athugala": "Athugala", "yapahuwa": "Yapahuwa", "ridi-vihara": "Ridi Viharaya", "kalpitiya": "Kalpitiya", "munneswaram": "Munneswaram temple", "wilpattu": "Wilpattu National Park", "koneswaram": "Koneswaram temple", "pigeon-island": "Pigeon Island National Park", "marble-beach": "Marble Beach", "pasikudah": "Pasikudah", "batticaloa-fort": "Batticaloa Fort", "arugam-bay": "Arugam Bay", "kumana": "Kumana National Park", "nallur": "Nallur Kandaswamy Temple", "jaffna-fort": "Jaffna Fort", "casuarina": "Casuarina Beach", "point-pedro": "Point Pedro", "nagadeepa": "Nagadeepa Purana Viharaya", "iranamadu": "Iranamadu Tank", "mullaitivu-beach": "Mullaitivu", "baobab": "Pallimunai Baobab", "madhu": "Shrine of Our Lady of Madhu", "thalaimannar": "Talaimannar"};
+const PH = {};
+const WAPI = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail%7Cname&pithumbsize=600&pilicense=free";
+async function loadPhoto(id){
+  const box = () => document.querySelector(`.photo[data-id="${id}"]`);
+  if (!WIKI[id]) { const b = box(); if (b) b.classList.add("none"); return; }
+  if (!(id in PH)){
+    try {
+      let pg = Object.values((await (await fetch(WAPI + "&titles=" + encodeURIComponent(WIKI[id]))).json()).query?.pages || {})[0];
+      if (!pg || !pg.thumbnail){
+        const sr = await (await fetch(WAPI + "&generator=search&gsrlimit=1&gsrsearch=" + encodeURIComponent(BY[id].en + " Sri Lanka"))).json();
+        pg = Object.values(sr.query?.pages || {})[0];
+      }
+      PH[id] = pg && pg.thumbnail ? {src:pg.thumbnail.source, file:pg.pageimage, title:pg.title} : null;
+    } catch(e){ PH[id] = undefined; }
+  }
+  const b = box(); if (!b) return;
+  const ph = PH[id];
+  if (!ph){ b.classList.add("none"); if (ph === undefined) delete PH[id]; return; }
+  b.innerHTML = `<img src="${ph.src}" alt="${name(BY[id])}" loading="lazy" onerror="this.parentElement.classList.add('none')">
+    <a class="cr" target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/File:${encodeURIComponent(ph.file)}">📷 ${T[lang].photo}</a>`;
+}
+
+// ---------------- visited ----------------
+let visited = new Set((store.get("visited") || "").split(",").filter(id => BY[id]));
+const saveVis = () => { store.set("visited", [...visited].join(",")); $("visN").textContent = visited.size; };
+function toggleVisited(id){ visited.has(id) ? visited.delete(id) : visited.add(id); saveVis(); refreshAll(); renderVis(); }
+window.popVisited = id => setTimeout(() => toggleVisited(id), 0);
+const PLACES_ONLY = PLACES.filter(p => p.c !== "food"), FOODS = PLACES.filter(p => p.c === "food");
+function renderVis(){
+  const vp = PLACES_ONLY.filter(p => visited.has(p.id)).length, vf = FOODS.filter(p => visited.has(p.id)).length;
+  $("visPct").textContent = vp; $("visOf").textContent = T[lang].vof(PLACES_ONLY.length, vf, FOODS.length);
+  $("visBar").style.width = (vp / PLACES_ONLY.length * 100) + "%";
+  $("visCats").innerHTML = Object.entries(CATS).map(([k, v]) => { const all = PLACES.filter(p => p.c === k), n = all.filter(p => visited.has(p.id)).length;
+    return `<span>${v.e} ${n}/${all.length}</span>`; }).join("");
+  const list = PLACES.filter(p => visited.has(p.id));
+  $("visList").innerHTML = list.length ? list.map(p => `<div class="tl"><span class="num" style="background:${CATS[p.c].c};color:#fff">${CATS[p.c].e}</span>
+      <div class="nm"><b>${name(p)}</b><small>${dname(p.d)}</small></div><div class="ctl"><button data-v="${p.id}" aria-label="${T[lang].rm}">✕</button></div></div>`).join("")
+    : `<div class="trip-empty">${T[lang].vempty}</div>`;
+  $("visList").querySelectorAll("button[data-v]").forEach(b => b.onclick = () => toggleVisited(b.dataset.v));
+}
+const openVis = () => { renderVis(); $("vis").classList.add("open"); $("scrim").classList.add("open"); };
+const closeVis = () => { $("vis").classList.remove("open"); $("scrim").classList.remove("open"); };
+$("visShare").onclick = () => {
+  const vp = PLACES_ONLY.filter(p => visited.has(p.id)).length, url = location.href.split("#")[0];
+  const text = T[lang].vtext(vp, PLACES_ONLY.length);
+  if (navigator.share) navigator.share({title:T[lang].title, text, url}).catch(()=>{});
+  else navigator.clipboard?.writeText(text + " " + url).then(() => toast(T[lang].copied));
+};
+
+// ---------------- trip ----------------
+let trip = (store.get("trip") || "").split(",").filter(id => getP(id));
+const saveTrip = () => { store.set("trip", trip.join(",")); $("tripN").textContent = trip.length; };
+function toggleTrip(id){
+  if (id.startsWith("o|")){ const base = id.split("|").slice(0, 2).join("|") + "|"; const j = trip.findIndex(t => t.startsWith(base)); if (j >= 0) id = trip[j]; }
+  const i = trip.indexOf(id);
+  if (i >= 0){ trip.splice(i, 1); toast(T[lang].tremoved); } else { trip.push(id); toast(T[lang].tadded); }
+  saveTrip(); refreshAll();
+}
+function moveTrip(i, d){ const j = i + d; if (j < 0 || j >= trip.length) return; [trip[i], trip[j]] = [trip[j], trip[i]]; saveTrip(); refreshAll(); }
+function renderTrip(){
+  $("tripList").innerHTML = trip.length ? trip.map((id, i) => { const p = getP(id); return `<div class="tl"><span class="num">${i+1}</span>
+      <div class="nm"><b>${name(p)}</b><small>${p.osm ? p.ic + " " + T[lang].osmsrc : CATS[p.c].e + " " + dname(p.d)}</small></div>
+      <div class="ctl"><button data-a="up" data-i="${i}" ${i===0?"disabled":""} aria-label="${T[lang].up}">↑</button><button data-a="down" data-i="${i}" ${i===trip.length-1?"disabled":""} aria-label="${T[lang].down}">↓</button><button data-a="rm" data-i="${i}" aria-label="${T[lang].rm}">✕</button></div></div>`; }).join("")
+    : `<div class="trip-empty">${T[lang].tempty}</div>`;
+  $("tripF").style.display = trip.length ? "grid" : "none";
+  $("tripList").querySelectorAll("button").forEach(b => b.onclick = () => { const i = +b.dataset.i; b.dataset.a === "rm" ? toggleTrip(trip[i]) : moveTrip(i, b.dataset.a === "up" ? -1 : 1); });
+  const stops = trip.slice(0, 10).map(getP);
+  if (stops.length){
+    const dest = stops[stops.length-1], wps = stops.slice(0, -1);
+    $("tripRoute").href = "https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=" + gq(dest) + (wps.length ? "&waypoints=" + wps.map(gq).join("%7C") : "");
+  }
+  drawTripLine();
+}
+$("tripRoute").addEventListener("click", () => { if (trip.length > 10) toast(T[lang].tmax); });
+const openTrip = () => { renderTrip(); $("trip").classList.add("open"); $("scrim").classList.add("open"); };
+const closeTrip = () => { $("trip").classList.remove("open"); $("scrim").classList.remove("open"); };
+$("tripBtn").onclick = openTrip; $("tripClose").onclick = closeTrip; $("scrim").onclick = () => { closeTrip(); closeVis(); };
+$("visBtn").onclick = openVis; $("visClose").onclick = closeVis;
+$("tripClear").onclick = () => { if (confirm(T[lang].tconfirm)){ trip = []; saveTrip(); refreshAll(); } };
+$("tripShare").onclick = () => {
+  const url = location.href.split("#")[0] + "#trip=" + trip.map(encodeURIComponent).join(",");
+  if (navigator.share) navigator.share({title:T[lang].trip, text:trip.map((id,i) => `${i+1}. ${name(getP(id))}`).join("\n"), url}).catch(()=>{});
+  else navigator.clipboard?.writeText(url).then(() => toast(T[lang].copied));
+};
+$("tripShow").onclick = () => { closeTrip(); if (trip.length) map.flyToBounds(L.latLngBounds(trip.map(id => [getP(id).lat, getP(id).lng])), {padding:[50,50], maxZoom:12, duration:.8}); };
+
+// ---------------- map ----------------
+const SL = L.latLngBounds([5.85, 79.5], [9.9, 81.95]);
+const map = L.map("map", {zoomControl:true, minZoom:7, maxZoom:18, maxBounds:SL.pad(0.4)}).fitBounds(SL);
+// Built-in base map: always works, even offline or when opened from a file.
+map.createPane("labels"); map.getPane("labels").style.zIndex = 450; map.getPane("labels").style.pointerEvents = "none";
+L.geoJSON(DISTRICTS, {style:{color:"#7FA79E", weight:1, fillColor:"#F4F1E8", fillOpacity:1}, interactive:false,
+  attribution:'Boundaries: geoBoundaries / &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL)'}).addTo(map);
+const labelIcon = n => L.divIcon({className:"dlabel", html:`<span>${dname(n)}</span>`, iconSize:[120,20], iconAnchor:[60,10]});
+const distMarkers = DISTRICTS.features.map(f => L.marker([f.properties.lat, f.properties.lng], {pane:"labels", interactive:false, keyboard:false, icon:labelIcon(f.properties.n)}));
+distMarkers.forEach((m, i) => m.dn = DISTRICTS.features[i].properties.n);
+const distLabels = L.layerGroup(distMarkers);
+const showLabels = () => map.getZoom() >= 8 ? distLabels.addTo(map) : distLabels.remove();
+map.on("zoomend", showLabels);
+// Street map on top, only when the site is online (OpenStreetMap blocks pages opened from a file).
+if (location.protocol.startsWith("http")){
+  let bad = 0;
+  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:18, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
+    .on("tileerror", () => { if (++bad > 8) map.removeLayer(osm); }).addTo(map);
+  L.geoJSON(DISTRICTS, {style:{color:"#0E4D45", weight:1, opacity:.45, fillOpacity:0}, interactive:false}).addTo(map);
+}
+let hiDist = null, tripLine = null;
+const cluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:42, disableClusteringAtZoom:11,
+  iconCreateFunction:c => { const n = c.getChildCount(); return L.divIcon({className:"", html:`<div class="clu${n>=10?" big":""}">${n}</div>`, iconSize:[n>=10?48:40, n>=10?48:40]}); }}).addTo(map);
+const markers = {};
+const POPOPT = {autoPanPaddingTopLeft:[56,120], autoPanPaddingBottomRight:[20,24]};
+const pinIcon = p => { const k = CATS[p.c], n = trip.indexOf(p.id);
+  return L.divIcon({className:"", html:`<div class="pin${p.id===selId?" sel":""}" data-id="${p.id}" style="background:${k.c}">${k.e}${n>=0?`<span class="no">${n+1}</span>`:""}</div>`, iconSize:[30,30], iconAnchor:[15,15], popupAnchor:[0,-14]}); };
+PLACES.forEach(p => { markers[p.id] = L.marker([p.lat, p.lng], {icon:pinIcon(p), title:p.en}).on("click", () => select(p.id, false)).bindPopup(() => popup(p), POPOPT); });
+map.on("popupopen", e => { const el = e.popup.getElement().querySelector(".wx"); if (el){ loadWx(el.dataset.id); loadPhoto(el.dataset.id); } });
+function drawTripLine(){
+  if (tripLine) map.removeLayer(tripLine);
+  tripLine = trip.length > 1 ? L.polyline(trip.map(id => [getP(id).lat, getP(id).lng]), {color:"#E8A33A", weight:3, dashArray:"6 8", opacity:.9, interactive:false}).addTo(map) : null;
+}
+const legend = L.control({position:"bottomleft"});
+legend.onAdd = () => { const d = L.DomUtil.create("div", "leaflet-control legend"); d.id = "legend"; return d; };
+legend.addTo(map);
+
+// ---------------- scenic railways (approximate lines between stations) ----------------
+const RAIL = [
+ {id:"main", color:"#B3261E", si:"කඳුකර මාර්ගය: කොළඹ – මහනුවර – ඇල්ල – බදුල්ල", ta:"மலைநாட்டுப் பாதை: கொழும்பு – கண்டி – எல்ல – பதுளை", en:"Main Line: Colombo – Kandy – Ella – Badulla",
+  dsi:"ලංකාවේ ලස්සනම දුම්රිය ගමන. තේ වතු, දිය ඇලි, උමං සහ නවය ආරුක්කු පාලම හරහා යනවා. ඇල්ල කොටස වඩාත් ප්‍රසිද්ධයි.", dta:"இலங்கையின் மிக அழகான ரயில் பயணம். தேயிலைத் தோட்டங்கள், நீர்வீழ்ச்சிகள், சுரங்கங்கள், ஒன்பது வளைவுப் பாலம் வழியாகச் செல்கிறது.", den:"Sri Lanka's most beautiful train ride, through tea estates, waterfalls, tunnels and over the Nine Arch Bridge. The Ella section is the most famous.",
+  st:[["Colombo Fort","කොළඹ කොටුව","கொழும்பு கோட்டை",6.9336,79.8500],["Ragama","රාගම","ராகம",7.0310,79.9220],["Gampaha","ගම්පහ","கம்பஹா",7.0910,79.9990],["Veyangoda","වෑයන්ගොඩ","வேயங்கொடை",7.1550,80.0960],["Polgahawela","පොල්ගහවෙල","பொல்கஹவெல",7.3340,80.3000],["Rambukkana","රඹුක්කන","ரம்புக்கனை",7.3220,80.3950],["Kadugannawa","කඩුගන්නාව","கடுகண்ணாவை",7.2540,80.5230],["Peradeniya","පේරාදෙණිය","பேராதனை",7.2570,80.5900],["Gampola","ගම්පොළ","கம்பளை",7.1640,80.5740],["Nawalapitiya","නාවලපිටිය","நாவலப்பிட்டி",7.0540,80.5340],["Hatton","හැටන්","ஹட்டன்",6.8920,80.5960],["Talawakele","තලවාකැලේ","தலவாக்கலை",6.9370,80.6590],["Nanu Oya","නානුඔය","நானுஓயா",6.9460,80.7450],["Pattipola","පට්ටිපොළ","பட்டிப்பொல",6.8560,80.8360],["Ohiya","ඔහිය","ஒஹிய",6.8210,80.8420],["Haputale","හපුතලේ","ஹப்புத்தளை",6.7670,80.9580],["Bandarawela","බණ්ඩාරවෙල","பண்டாரவளை",6.8320,80.9870],["Ella","ඇල්ල","எல்ல",6.8730,81.0470],["Demodara","දෙමෝදර","தெமோதரை",6.9000,81.0510],["Badulla","බදුල්ල","பதுளை",6.9850,81.0560]]},
+ {id:"kandy", color:"#B3261E", branch:true, st:[["Peradeniya","පේරාදෙණිය","பேராதனை",7.2570,80.5900],["Kandy","මහනුවර","கண்டி",7.2900,80.6330]]},
+ {id:"coast", color:"#2A6FDB", si:"මුහුදුබඩ මාර්ගය: කොළඹ – ගාල්ල – මාතර", ta:"கடலோரப் பாதை: கொழும்பு – காலி – மாத்தறை", en:"Coast Line: Colombo – Galle – Matara",
+  dsi:"මුහුද අයිනෙන්ම යන ගමනක්. බොහෝ තැන්වල කෝච්චියේ ජනේලයෙන් රැළි පේනවා.", dta:"கடலோரமாகவே செல்லும் பயணம். பல இடங்களில் ரயில் ஜன்னலிலிருந்து அலைகள் தெரியும்.", den:"A ride right along the sea. In many places you can see the waves from the train window.",
+  st:[["Colombo Fort","කොළඹ කොටුව","கொழும்பு கோட்டை",6.9336,79.8500],["Mount Lavinia","ගල්කිස්ස","கல்கிசை",6.8320,79.8650],["Panadura","පානදුර","பாணந்துறை",6.7130,79.9030],["Kalutara South","කළුතර දකුණ","களுத்துறை தெற்கு",6.5800,79.9620],["Aluthgama","අලුත්ගම","அளுத்கம",6.4320,79.9960],["Hikkaduwa","හික්කඩුව","ஹிக்கடுவ",6.1400,80.1030],["Galle","ගාල්ල","காலி",6.0330,80.2140],["Weligama","වැලිගම","வெலிகம",5.9730,80.4200],["Matara","මාතර","மாத்தறை",5.9500,80.5450]]},
+ {id:"north", color:"#7A5AE0", si:"උතුරු මාර්ගය: කොළඹ – අනුරාධපුරය – යාපනය", ta:"வடக்குப் பாதை: கொழும்பு – அனுராதபுரம் – யாழ்ப்பாணம்", en:"Northern Line: Colombo – Anuradhapura – Jaffna",
+  dsi:"වියළි කලාපය හරහා ඉරණමඩු සහ අලිමංකඩ පසුකර යාපනයට යන දිගු ගමනක්.", dta:"வறண்ட வலயம் ஊடாக ஆனையிறவைக் கடந்து யாழ்ப்பாணம் செல்லும் நீண்ட பயணம்.", den:"A long ride through the dry zone and across Elephant Pass to Jaffna.",
+  st:[["Polgahawela","පොල්ගහවෙල","பொல்கஹவெல",7.3340,80.3000],["Kurunegala","කුරුණෑගල","குருணாகல்",7.4880,80.3640],["Maho","මහව","மஹவ",7.8220,80.2780],["Anuradhapura","අනුරාධපුරය","அனுராதபுரம்",8.3330,80.4100],["Vavuniya","වව්නියාව","வவுனியா",8.7530,80.4970],["Kilinochchi","කිලිනොච්චිය","கிளிநொச்சி",9.3890,80.4000],["Jaffna","යාපනය","யாழ்ப்பாணம்",9.6600,80.0150],["Kankesanthurai","කන්කසන්තුරේ","காங்கேசன்துறை",9.8100,80.0450]]}
+];
+const railLayer = L.layerGroup();
+function drawRail(){
+  railLayer.clearLayers();
+  RAIL.forEach(r => {
+    const info = r.branch ? RAIL[0] : r;
+    const ll = r.st.map(s => [s[3], s[4]]);
+    L.polyline(ll, {color:"#fff", weight:8, opacity:.9}).addTo(railLayer);
+    L.polyline(ll, {color:r.color, weight:4, dashArray:r.branch ? "2 6" : null}).addTo(railLayer)
+      .bindPopup(`<div class="rail-pop"><h3>🚆 ${info[lang]}</h3><p>${({si:info.dsi, ta:info.dta, en:info.den})[lang]}</p><small>${T[lang].railnote}</small></div>`);
+    r.st.forEach(s => L.marker([s[3], s[4]], {icon:L.divIcon({className:"", html:'<div class="stn" style="border-color:' + r.color + '"></div>', iconSize:[10,10], iconAnchor:[5,5]}), keyboard:false})
+      .bindTooltip("🚉 " + ({si:s[1], ta:s[2], en:s[0]})[lang], {direction:"top", offset:[0,-4]}).addTo(railLayer));
+  });
+}
+let railOn = false;
+const railCtl = L.control({position:"topleft"});
+railCtl.onAdd = () => { const b = L.DomUtil.create("button", "rail-btn leaflet-control"); b.id = "railBtn"; b.textContent = "🚆";
+  L.DomEvent.disableClickPropagation(b);
+  b.onclick = () => { railOn = !railOn; b.classList.toggle("on", railOn); if (railOn){ drawRail(); railLayer.addTo(map); toast(T[lang].railon); } else railLayer.remove(); };
+  return b; };
+railCtl.addTo(map);
+
+// ---------------- more places from OpenStreetMap (on demand, zoomed-in areas only) ----------------
+const OSM_MINZOOM = 12, OSM_MAX = 300;
+const OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
+const OT = { // type -> [category, icon, si, ta, en]
+  attraction:["heritage","📍","ආකර්ෂණීය ස්ථානය","சுற்றுலாத் தலம்","Attraction"], viewpoint:["hike","🏞","දර්ශන ස්ථානය","காட்சி முனை","Viewpoint"],
+  museum:["heritage","🏛","කෞතුකාගාරය","அருங்காட்சியகம்","Museum"], zoo:["wildlife","🦒","සත්වෝද්‍යානය","மிருகக்காட்சிசாலை","Zoo"],
+  theme_park:["heritage","🎡","විනෝද උද්‍යානය","கேளிக்கைப் பூங்கா","Theme park"], picnic_site:["nature","🧺","විනෝද චාරිකා ස්ථානය","சுற்றுலா உணவு இடம்","Picnic spot"],
+  waterfall:["nature","💧","දිය ඇල්ල","நீர்வீழ்ச்சி","Waterfall"], beach:["beach","🏖","වෙරළ","கடற்கரை","Beach"], peak:["hike","⛰","කඳු මුදුන","மலை உச்சி","Peak"],
+  cave_entrance:["nature","🕳","ගුහාව","குகை","Cave"], archaeological_site:["heritage","🏺","පුරාවිද්‍යා ස්ථානය","தொல்லியல் தளம்","Archaeological site"],
+  ruins:["heritage","🏚","නටබුන්","இடிபாடுகள்","Ruins"], fort:["heritage","🏰","බලකොටුව","கோட்டை","Fort"], monument:["heritage","🗿","ස්මාරකය","நினைவுச்சின்னம்","Monument"],
+  buddhist:["temple","☸️","බෞද්ධ විහාරය","பௌத்த விகாரை","Buddhist temple"], hindu:["temple","🛕","හින්දු කෝවිල","இந்துக் கோவில்","Hindu temple"],
+  christian:["temple","⛪","දේවස්ථානය","தேவாலயம்","Church"], muslim:["temple","🕌","පල්ලිය","பள்ளிவாசல்","Mosque"], worship:["temple","🙏","ආගමික ස්ථානය","வழிபாட்டுத் தலம்","Place of worship"],
+  restaurant:["food","🍛","කෑම කඩය","உணவகம்","Restaurant"], cafe:["food","☕","කැෆේ","கஃபே","Café"], fast_food:["food","🍔","ක්ෂණික ආහාර","துரித உணவு","Fast food"]
+};
+function osmType(t){
+  if (t.amenity === "place_of_worship") return ["buddhist","hindu","christian","muslim"].includes(t.religion) ? t.religion : "worship";
+  if (["restaurant","cafe","fast_food"].includes(t.amenity)) return t.amenity;
+  if (t.waterway === "waterfall" || t.natural === "waterfall") return "waterfall";
+  for (const k of ["tourism","natural","historic"]) if (OT[t[k]]) return t[k];
+  return t.tourism === "artwork" ? "attraction" : null;
+}
+const OSM = new Map(), osmLoaded = [];
+const osmCluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:36, disableClusteringAtZoom:16, spiderfyOnMaxZoom:true,
+  iconCreateFunction:c => L.divIcon({className:"", html:`<div class="oclu">${c.getChildCount()}</div>`, iconSize:[30,30]})});
+map.createPane("osmPane"); map.getPane("osmPane").style.zIndex = 590;
+const osmName = o => (lang === "si" && o.t["name:si"]) || (lang === "ta" && o.t["name:ta"]) || (lang === "en" && o.t["name:en"]) || o.t.name;
+const osmAlt = o => { const n = osmName(o), e = o.t["name:en"] || o.t.name; return e && e !== n ? e : ""; };
+const osmTripId = o => ["o", o.id, o.lat.toFixed(5), o.lng.toFixed(5), encodeURIComponent(osmName(o).replace(/[|,]/g, " ")), OT[o.type][0], encodeURIComponent(OT[o.type][1])].join("|");
+function osmPopup(o){
+  const ty = OT[o.type], inTrip = trip.some(t => t.startsWith("o|" + o.id + "|")), alt = osmAlt(o);
+  const osmUrl = `https://www.openstreetmap.org/${({n:"node",w:"way",r:"relation"})[o.id[0]]}/${o.id.slice(1)}`;
+  return `<div class="pop"><h3>${osmName(o)}</h3>${alt ? `<div class="alt">${alt}</div>` : ""}
+    <span class="tag"><span>${ty[1]}</span>${ty[({si:2, ta:3, en:4})[lang]]}</span>
+    ${o.t.opening_hours ? `<p style="font-size:13px">🕒 ${o.t.opening_hours}</p>` : ""}
+    <div class="osm-note">${T[lang].osmnote} <a href="${osmUrl}" target="_blank" rel="noopener">OpenStreetMap ↗</a></div>
+    <div class="acts">
+      <a class="btn btn-teal" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${o.lat},${o.lng}">${T[lang].dir}</a>
+      <button class="btn ${inTrip ? "btn-teal" : "btn-light"}" onclick="popOsmTrip('${o.id}')">${inTrip ? T[lang].added : T[lang].add}</button>
+    </div></div>`;
+}
+window.popOsmTrip = id => setTimeout(() => { const o = OSM.get(id); if (!o) return; toggleTrip(osmTripId(o)); const m = o.m; if (m.isPopupOpen()) m.setPopupContent(osmPopup(o)); }, 0);
+function osmVisible(o){ return cat === "all" || OT[o.type][0] === cat; }
+function renderOsm(){
+  osmCluster.clearLayers();
+  osmCluster.addLayers([...OSM.values()].filter(osmVisible).map(o => o.m));
+  if (OSM.size && !map.hasLayer(osmCluster)) osmCluster.addTo(map);
+}
+function osmIcon(o){ const c = CATS[OT[o.type][0]].c; return L.divIcon({className:"", html:`<div class="opin" style="border-color:${c}">${OT[o.type][1]}</div>`, iconSize:[22,22], iconAnchor:[11,11], popupAnchor:[0,-10]}); }
+async function loadOsm(){
+  const btn = $("moreBtn");
+  if (map.getZoom() < OSM_MINZOOM){ toast(T[lang].osmzoom); return; }
+  const b = map.getBounds(), bb = [b.getSouth(), b.getWest(), b.getNorth(), b.getEast()].map(v => v.toFixed(3)).join(",");
+  if (osmLoaded.some(x => x.contains(b))){ toast(T[lang].osmsame); return; }
+  const q = `[out:json][timeout:25];(
+    nwr["tourism"~"^(attraction|viewpoint|museum|zoo|theme_park|picnic_site)$"]["name"](${bb});
+    nwr["natural"~"^(waterfall|beach|peak|cave_entrance)$"]["name"](${bb});
+    nwr["waterway"="waterfall"]["name"](${bb});
+    nwr["historic"~"^(archaeological_site|ruins|fort|monument)$"]["name"](${bb});
+    nwr["amenity"="place_of_worship"]["name"](${bb});
+    nwr["amenity"~"^(restaurant|cafe|fast_food)$"]["name"](${bb});
+  );out center tags ${OSM_MAX};`;
+  btn.classList.add("busy"); btn.querySelector("span").textContent = T[lang].osmload;
+  let data = null;
+  for (const url of OVERPASS){
+    try { const r = await fetch(url, {method:"POST", body:"data=" + encodeURIComponent(q), headers:{"Content-Type":"application/x-www-form-urlencoded"}});
+      if (r.ok){ data = await r.json(); break; } } catch(e){}
+  }
+  btn.classList.remove("busy"); setMoreLabel();
+  if (!data){ toast(T[lang].osmfail); return; }
+  osmLoaded.push(b);
+  let added = 0;
+  data.elements.forEach(e => {
+    const id = e.type[0] + e.id; if (OSM.has(id)) return;
+    const t = e.tags || {}, type = osmType(t), lat = e.lat ?? e.center?.lat, lng = e.lon ?? e.center?.lon;
+    if (!type || !t.name || lat == null) return;
+    if (PLACES.some(p => p.c === OT[type][0] && Math.abs(p.lat - lat) < 0.0012 && Math.abs(p.lng - lng) < 0.0012)) return; // skip our own places
+    const o = {id, t, type, lat, lng}; o.m = L.marker([lat, lng], {icon:osmIcon(o), pane:"osmPane", title:t.name}).bindPopup(() => osmPopup(o), POPOPT);
+    OSM.set(id, o); added++;
+  });
+  renderOsm(); $("moreX").hidden = !OSM.size;
+  toast(added ? T[lang].osmfound(added) : T[lang].osmnone);
+}
+function setMoreLabel(){ const b = $("moreBtn"); if (!b || b.classList.contains("busy")) return;
+  const ok = map.getZoom() >= OSM_MINZOOM; b.classList.toggle("off", !ok); b.querySelector("span").textContent = ok ? T[lang].osmbtn : T[lang].osmzoomshort; }
+const moreCtl = L.control({position:"topleft"});
+moreCtl.onAdd = () => { const w = L.DomUtil.create("div", "more-wrap leaflet-control");
+  w.innerHTML = `<button class="more-btn off" id="moreBtn">🔍 <span></span></button><button class="more-x" id="moreX" hidden aria-label="Hide extra places">✕</button>`;
+  L.DomEvent.disableClickPropagation(w);
+  w.querySelector("#moreBtn").onclick = loadOsm;
+  w.querySelector("#moreX").onclick = () => { OSM.clear(); osmLoaded.length = 0; osmCluster.clearLayers(); w.querySelector("#moreX").hidden = true; };
+  return w; };
+moreCtl.addTo(map);
+map.on("zoomend", setMoreLabel);
+
+// ---------------- emergency (call only after confirm + press-and-hold) ----------------
+const SOS = [
+  {n:"119", ic:"👮", si:"පොලිස් හදිසි ඇමතුම්", ta:"காவல்துறை அவசர அழைப்பு", en:"Police emergency"},
+  {n:"1990", ic:"🚑", si:"සුව සැරිය ගිලන්රථ (නොමිලේ)", ta:"சுவ செரிய அம்புலன்ஸ் (இலவசம்)", en:"Suwa Seriya ambulance (free)"},
+  {n:"110", ic:"🚒", si:"ගිනි නිවීම සහ ගලවා ගැනීම", ta:"தீயணைப்பு மற்றும் மீட்பு", en:"Fire and rescue"},
+  {n:"117", ic:"🌊", si:"ආපදා කළමනාකරණ මධ්‍යස්ථානය", ta:"அனர்த்த முகாமைத்துவ நிலையம்", en:"Disaster Management Centre"},
+  {n:"107", ic:"☎️", si:"හදිසි ඇමතුම් (දෙමළ මාධ්‍යයෙන්)", ta:"அவசர அழைப்பு நிலையம் (தமிழ் மொழி)", en:"Emergency call centre (Tamil)"},
+  {n:"1912", ic:"ℹ️", si:"ශ්‍රී ලංකා සංචාරක තොරතුරු", ta:"இலங்கை சுற்றுலா தகவல்", en:"Sri Lanka Tourism hotline"}
+];
+const sosCtl = L.control({position:"topright"});
+sosCtl.onAdd = () => { const b = L.DomUtil.create("button", "sos-ctl leaflet-control"); b.textContent = "SOS"; b.setAttribute("aria-label", "Emergency numbers");
+  L.DomEvent.disableClickPropagation(b); b.onclick = openSos; return b; };
+sosCtl.addTo(map);
+function renderSos(){
+  $("sosList").innerHTML = SOS.map((x, i) => `<button class="sos-row" data-i="${i}"><span class="ic">${x.ic}</span><span class="nm">${x[lang]}<small>${T[lang].tapcall}</small></span><span class="no">${x.n}</span></button>`).join("") +
+    `<div class="sos-links">
+      <a class="btn btn-light" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("hospital near me")}">🏥 ${T[lang].hosp}</a>
+      <a class="btn btn-light" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("police station near me")}">👮 ${T[lang].pol}</a>
+      <button class="btn btn-amber" id="myLoc" style="grid-column:1/-1">📍 ${T[lang].myloc}</button></div>
+    <p class="sos-note">${T[lang].sosnote}</p>`;
+  $("sosList").querySelectorAll(".sos-row").forEach(b => b.onclick = () => confirmCall(SOS[+b.dataset.i]));
+  $("myLoc").onclick = shareMyLoc;
+}
+function openSos(){ renderSos(); $("sosList").hidden = false; $("sosConfirm").hidden = true; $("sos").classList.add("open"); }
+function closeSos(){ $("sos").classList.remove("open"); cancelHold(); }
+$("sosClose").onclick = closeSos; $("sos").onclick = e => { if (e.target.id === "sos") closeSos(); };
+$("scBack").onclick = () => { cancelHold(); $("sosConfirm").hidden = true; $("sosList").hidden = false; };
+window.dial = n => { location.href = "tel:" + n; };
+let callNum = null, holdT = null, holdStart = 0, raf = null;
+const HOLD_MS = 1200;
+function confirmCall(x){
+  callNum = x.n; $("scNum").textContent = x.n; $("scName").textContent = x.ic + " " + x[lang];
+  $("holdTxt").textContent = T[lang].hold; $("holdFill").style.width = "0";
+  $("sosList").hidden = true; $("sosConfirm").hidden = false;
+}
+function startHold(e){
+  if (e) e.preventDefault(); if (holdT) return;
+  holdStart = performance.now(); $("holdTxt").textContent = T[lang].holding;
+  const step = () => { const p = Math.min(1, (performance.now() - holdStart) / HOLD_MS); $("holdFill").style.width = (p * 100) + "%"; if (p < 1) raf = requestAnimationFrame(step); };
+  raf = requestAnimationFrame(step);
+  holdT = setTimeout(() => { holdT = null; cancelAnimationFrame(raf); $("holdTxt").textContent = T[lang].calling + " " + callNum; window.dial(callNum); }, HOLD_MS);
+}
+function cancelHold(){ if (!holdT) return; clearTimeout(holdT); holdT = null; cancelAnimationFrame(raf); $("holdFill").style.width = "0"; $("holdTxt").textContent = T[lang].hold; }
+const hb = $("holdBtn");
+hb.addEventListener("pointerdown", startHold); ["pointerup","pointerleave","pointercancel"].forEach(ev => hb.addEventListener(ev, cancelHold));
+hb.addEventListener("contextmenu", e => e.preventDefault());
+hb.addEventListener("keydown", e => { if ((e.key === " " || e.key === "Enter") && !e.repeat) startHold(e); });
+hb.addEventListener("keyup", e => { if (e.key === " " || e.key === "Enter") cancelHold(); });
+hb.addEventListener("click", e => e.preventDefault());
+function shareMyLoc(){
+  if (!navigator.geolocation) return toast(T[lang].locfail);
+  toast(T[lang].locating);
+  navigator.geolocation.getCurrentPosition(pos => {
+    const {latitude:a, longitude:o} = pos.coords, url = `https://www.google.com/maps?q=${a.toFixed(5)},${o.toFixed(5)}`;
+    const text = T[lang].mylocmsg + " " + url;
+    if (navigator.share) navigator.share({text}).catch(()=>{}); else navigator.clipboard?.writeText(text).then(() => toast(T[lang].copied));
+  }, () => toast(T[lang].locfail), {enableHighAccuracy:true, timeout:10000});
+}
+
+// ---------------- best time to visit (general guide) ----------------
+const ALL = [1,2,3,4,5,6,7,8,9,10,11,12];
+const R = (a, b) => { const r = []; for (let m = a; ; m = m % 12 + 1){ r.push(m); if (m === b) break; } return r; };
+const REGION = {
+  Colombo:R(12,4), Gampaha:R(12,4), Kalutara:R(12,4), Galle:R(12,4), Matara:R(12,4), Hambantota:R(12,9),
+  Kandy:R(1,4), "Nuwara Eliya":R(1,4), Kegalle:R(12,4), Ratnapura:R(1,4),
+  Badulla:R(2,9), Monaragala:R(2,9),
+  Anuradhapura:R(2,9), Polonnaruwa:R(2,9), Matale:R(2,9), Kurunegala:R(2,9),
+  Trincomalee:R(4,9), Batticaloa:R(4,9), Ampara:R(4,9),
+  Jaffna:R(2,9), Kilinochchi:R(2,9), Mullaitivu:R(2,9), Mannar:R(2,9), Vavuniya:R(2,9), Puttalam:R(11,4)
+};
+const SPECIAL = {
+  "sri-pada":R(12,5), yala:R(2,6), minneriya:R(7,10), wilpattu:R(2,9), udawalawe:ALL, sinharaja:[1,2,3,4,8,9],
+  kumana:R(4,9), bundala:R(9,3), mirissa:R(11,4), riverston:R(1,4), "food-malwana":R(6,8), "food-kalutara-mangosteen":R(6,8),
+  "lotus-tower":ALL, "national-museum":ALL, "galle-face":ALL, "dalada-maligawa":ALL, kelaniya:ALL, gangaramaya:ALL
+};
+const SNOTE = {
+  "sri-pada":{si:"වන්දනා වාරය සාමාන්‍යයෙන් දෙසැම්බර් උඳුවප් පොහොයේ සිට මැයි වෙසක් පොහොය දක්වා.", ta:"யாத்திரைப் பருவம் பொதுவாக டிசம்பர் உந்துவப் போயா முதல் மே வெசாக் போயா வரை.", en:"Pilgrim season usually runs from Unduvap Poya in December to Vesak Poya in May."},
+  yala:{si:"සාමාන්‍යයෙන් සැප්තැම්බර්–ඔක්තෝබර් කාලයේ කොටසක් වසා තබනවා. යන්න කලින් පරීක්ෂා කරන්න.", ta:"பொதுவாக செப்டம்பர்–ஒக்டோபரில் சில காலம் மூடப்படும். செல்லும் முன் சரிபார்க்கவும்.", en:"Usually closed for part of September–October. Check before you go."},
+  minneriya:{si:"අලි රංචු එකතු වන 'The Gathering' බලන්න හොඳම කාලය.", ta:"யானைகள் கூடும் 'The Gathering' காண சிறந்த காலம்.", en:"The best time to see elephants at 'The Gathering'."},
+  mirissa:{si:"තල්මසුන් බැලීමේ වාරය.", ta:"திமிங்கிலம் பார்க்கும் பருவம்.", en:"Whale-watching season."},
+  bundala:{si:"සංක්‍රමණික කුරුල්ලන් එන කාලය.", ta:"புலம்பெயர் பறவைகள் வரும் காலம்.", en:"Migratory bird season."}
+};
+PLACES.forEach(p => p.best = SPECIAL[p.id] || ((p.c === "temple" && p.id !== "sri-pada") || p.c === "food" ? ALL : REGION[p.d] || ALL));
+const MN = {
+  si:["ජනවාරි","පෙබරවාරි","මාර්තු","අප්‍රේල්","මැයි","ජූනි","ජූලි","අගෝස්තු","සැප්තැම්බර්","ඔක්තෝබර්","නොවැම්බර්","දෙසැම්බර්"],
+  ta:["ஜனவரி","பெப்ரவரி","மார்ச்","ஏப்ரல்","மே","ஜூன்","ஜூலை","ஓகஸ்ட்","செப்டம்பர்","ஒக்டோபர்","நவம்பர்","டிசம்பர்"],
+  en:["January","February","March","April","May","June","July","August","September","October","November","December"]
+};
+const MS = {si:["1","2","3","4","5","6","7","8","9","10","11","12"], ta:["1","2","3","4","5","6","7","8","9","10","11","12"], en:["J","F","M","A","M","J","J","A","S","O","N","D"]};
+const WD = {si:["ඉරිදා","සඳුදා","අඟහරුවාදා","බදාදා","බ්‍රහස්පතින්දා","සිකුරාදා","සෙනසුරාදා"], ta:["ஞாயிறு","திங்கள்","செவ்வாய்","புதன்","வியாழன்","வெள்ளி","சனி"], en:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]};
+const NOWM = new Date().getMonth() + 1;
+function bestText(b){
+  if (b.length === 12) return T[lang].allyear;
+  const set = new Set(b), runs = []; let start = null;
+  for (let i = 0; i < 24; i++){ const m = i % 12 + 1, inS = set.has(m), prevIn = set.has((m + 10) % 12 + 1);
+    if (inS && !prevIn && start === null) start = m;
+    if (start !== null && inS && !set.has(m % 12 + 1)){ runs.push([start, m]); start = null; if (runs.length && i >= 12) break; } }
+  const uniq = [...new Map(runs.map(r => [r.join("-"), r])).values()];
+  return uniq.map(([a, z]) => a === z ? MN[lang][a-1] : `${MN[lang][a-1]} – ${MN[lang][z-1]}`).join(", ");
+}
+function seasonHtml(p){
+  const n = SNOTE[p.id];
+  return `<div class="season"><small>🗓 ${T[lang].best}: ${bestText(p.best)}</small>
+    <div class="mstrip">${MS[lang].map((m, i) => `<i class="${p.best.includes(i+1) ? "g" : ""}${i+1 === NOWM ? " now" : ""}" title="${MN[lang][i]}">${m}</i>`).join("")}</div>
+    ${n ? `<div class="snote">${n[lang]}</div>` : ""}</div>`;
+}
+
+// ---------------- weather (Open-Meteo, free, no key) ----------------
+const WX = {}, WXC = c => c === 0 ? ["☀️","clear"] : c <= 2 ? ["🌤","partly"] : c === 3 ? ["☁️","cloudy"] : c <= 48 ? ["🌫","fog"] : c <= 57 ? ["🌦","drizzle"] : c <= 67 ? ["🌧","rain"] : c <= 82 ? ["🌦","showers"] : ["⛈","storm"];
+const WXT = {clear:{si:"පැහැදිලියි",ta:"தெளிவு",en:"Clear"}, partly:{si:"වලාකුළු ස්වල්පයක්",ta:"ஓரளவு மேகம்",en:"Partly cloudy"}, cloudy:{si:"වලාකුළු",ta:"மேகமூட்டம்",en:"Cloudy"},
+  fog:{si:"මීදුම",ta:"மூடுபனி",en:"Fog"}, drizzle:{si:"පොද වැසි",ta:"தூறல்",en:"Drizzle"}, rain:{si:"වැසි",ta:"மழை",en:"Rain"}, showers:{si:"වැසි ඇති විය හැක",ta:"மழைத் தூறல்",en:"Showers"}, storm:{si:"ගිගුරුම් සහිත වැසි",ta:"இடியுடன் மழை",en:"Thunderstorms"}};
+async function loadWx(id){
+  const p = BY[id], box = document.querySelector(`.wx[data-id="${id}"]`); if (!box) return;
+  const cached = WX[id];
+  if (!cached || Date.now() - cached.t > 30*60*1000){
+    box.textContent = T[lang].wxload;
+    try {
+      const u = `https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lng}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FColombo&forecast_days=3`;
+      const r = await fetch(u); if (!r.ok) throw 0; WX[id] = {t:Date.now(), d:(await r.json()).daily};
+    } catch(e){ const b2 = document.querySelector(`.wx[data-id="${id}"]`); if (b2) b2.textContent = T[lang].wxfail; return; }
+  }
+  const d = WX[id].d, b = document.querySelector(`.wx[data-id="${id}"]`); if (!b) return;
+  const dayName = (s, i) => i === 0 ? T[lang].today : i === 1 ? T[lang].tomorrow : WD[lang][new Date(s + "T12:00:00+05:30").getUTCDay()];
+  b.innerHTML = `<div class="days">${d.time.map((t, i) => { const [ic, k] = WXC(d.weather_code[i]); return `<div><b>${dayName(t, i)}</b><div class="ic" title="${WXT[k][lang]}">${ic}</div>
+    <div class="t">${Math.round(d.temperature_2m_max[i])}° / ${Math.round(d.temperature_2m_min[i])}°</div><div class="r">💧 ${d.precipitation_probability_max[i] ?? "–"}%</div></div>`; }).join("")}</div>
+    <span class="src">${T[lang].wxsrc} <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a></span>`;
+}
+
+function popup(p){
+  const k = CATS[p.c], inTrip = trip.includes(p.id);
+  const vis = visited.has(p.id);
+  return `<div class="pop">${WIKI[p.id] ? `<div class="photo" data-id="${p.id}"></div>` : ""}<h3>${name(p)}</h3><div class="alt">${alt(p)}</div>
+    <span class="tag"><span>${k.e}</span>${k[lang]} · ${dname(p.d)}</span>
+    <div><button class="vbtn${vis ? " on" : ""}" onclick="popVisited('${p.id}')">${vis ? T[lang].vyes : T[lang].vno}</button></div>
+    <p>${desc(p)}</p>
+    ${seasonHtml(p)}
+    <div class="wx" data-id="${p.id}"></div>
+    <div class="acts">
+      <a class="btn btn-teal" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${gq(p)}">${T[lang].dir}</a>
+      <a class="btn btn-amber" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("restaurants near " + p.en + ", Sri Lanka")}">${T[lang].food}</a>
+      <button class="btn ${inTrip ? "btn-teal" : "btn-light"}" onclick="popTrip('${p.id}')">${inTrip ? T[lang].added : T[lang].add}</button>
+      <button class="btn btn-light" onclick="share('${p.id}')">${T[lang].share}</button>
+    </div></div>`;
+}
+window.popTrip = id => setTimeout(() => toggleTrip(id), 0);
+window.share = id => {
+  const p = BY[id], url = location.href.split("#")[0] + "#" + id;
+  if (navigator.share) navigator.share({title:name(p), text:name(p) + " – " + T[lang].title, url}).catch(()=>{});
+  else navigator.clipboard?.writeText(url).then(() => toast(T[lang].copied));
+};
+
+// ---------------- filters & list ----------------
+const hav = (a, b) => { const R = 6371, r = Math.PI/180, dLa = (b.lat-a.lat)*r, dLo = (b.lng-a.lng)*r;
+  const h = Math.sin(dLa/2)**2 + Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLo/2)**2; return 2*R*Math.asin(Math.sqrt(h)); };
+const norm = s => s.toLowerCase().normalize("NFC");
+function filtered(){
+  const qq = norm(q.trim());
+  let r = PLACES.filter(p => (cat === "all" || p.c === cat) && (!dist || p.d === dist) && (!month || p.best.includes(month)) &&
+    (!qq || norm([p.en,p.si,p.ta,p.d,DN.si[p.d],DN.ta[p.d],p.den,p.dsi,p.dta].join(" ")).includes(qq)));
+  if (me) r = r.map(p => ({...p, km:hav(me, p)})).sort((a,b) => a.km - b.km);
+  return r;
+}
+function render(){
+  const r = filtered();
+  cluster.clearLayers(); cluster.addLayers(r.map(p => markers[p.id]));
+  $("count").textContent = T[lang].count(r.length);
+  $("list").innerHTML = r.length ? r.map(p => { const k = CATS[p.c], inT = trip.includes(p.id); return `<div class="card${p.id===selId?" sel":""}" data-id="${p.id}" tabindex="0">
+      <div class="dot" style="background:${k.c}">${k.e}</div>
+      <div><b>${name(p)}${visited.has(p.id) ? '<span class="star" title="✓">⭐</span>' : ""}</b><div class="meta">${k[lang]} · ${dname(p.d)}${month && p.best.length < 12 ? `<span class="good">✓ ${MN[lang][month-1]}</span>` : ""}</div></div>
+      <div class="side"><button class="add${inT?" in":""}" data-add="${p.id}" aria-label="${inT?T[lang].added:T[lang].add}" title="${inT?T[lang].added:T[lang].add}">${inT?"✓":"+"}</button>
+      ${p.km != null ? `<span class="km">${p.km < 10 ? p.km.toFixed(1) : Math.round(p.km)} ${T[lang].km}</span>` : ""}</div></div>`; }).join("")
+    : `<div class="empty">${T[lang].empty}</div>`;
+  $("list").querySelectorAll(".card").forEach(c => { c.onclick = e => { if (e.target.closest(".add")) return; select(c.dataset.id, true); }; c.onkeydown = e => { if (e.key === "Enter") select(c.dataset.id, true); }; });
+  $("list").querySelectorAll(".add").forEach(b => b.onclick = () => toggleTrip(b.dataset.add));
+}
+let keepPopup = false;
+function refreshAll(){
+  const openId = selId && markers[selId].isPopupOpen() ? selId : null;
+  keepPopup = true;
+  PLACES.forEach(p => markers[p.id].setIcon(pinIcon(p)));
+  render(); renderTrip();
+  keepPopup = false;
+  if (openId){ selId = openId; const m = markers[openId];
+    if (!m.isPopupOpen()) cluster.zoomToShowLayer(m, () => m.openPopup()); else { m.setPopupContent(popup(BY[openId])); loadWx(openId); loadPhoto(openId); }
+    document.querySelectorAll(".pin").forEach(el => el.classList.toggle("sel", el.dataset.id === openId)); }
+}
+function select(id, fly){
+  selId = id; const p = BY[id], m = markers[id];
+  if (!cluster.hasLayer(m)) cluster.addLayer(m);
+  if (fly){ map.flyTo([p.lat, p.lng], Math.max(map.getZoom(), 12), {duration:.8}); setTimeout(() => cluster.zoomToShowLayer(m, () => m.openPopup()), 850);
+    if (innerWidth <= 820) window.scrollTo({top:0, behavior:"smooth"}); }
+  document.querySelectorAll(".pin").forEach(el => el.classList.toggle("sel", el.dataset.id === id));
+  document.querySelectorAll(".card").forEach(el => el.classList.toggle("sel", el.dataset.id === id));
+  const card = document.querySelector(`.card[data-id="${id}"]`); if (card && !fly && innerWidth > 820) card.scrollIntoView({block:"nearest", behavior:"smooth"});
+  history.replaceState(null, "", "#" + id);
+}
+map.on("popupclose", () => { if (keepPopup) return; selId = null; document.querySelectorAll(".pin.sel,.card.sel").forEach(el => el.classList.remove("sel")); history.replaceState(null, "", location.pathname + location.search); });
+map.on("zoomend moveend", () => document.querySelectorAll(".pin").forEach(el => el.classList.toggle("sel", el.dataset.id === selId)));
+
+function buildChips(){
+  $("chips").innerHTML = `<button class="chip${cat==="all"?" on":""}" data-c="all">${T[lang].all}</button>` +
+    Object.entries(CATS).map(([k,v]) => `<button class="chip${cat===k?" on":""}" data-c="${k}"><i style="background:${v.c}"></i>${v.e} ${v[lang]}</button>`).join("");
+  $("chips").querySelectorAll(".chip").forEach(b => b.onclick = () => { cat = b.dataset.c; buildChips(); render(); renderOsm(); });
+}
+function buildDist(){
+  const ds = [...new Set(PLACES.map(p => p.d))].sort((a,b) => dname(a).localeCompare(dname(b), lang));
+  $("dist").innerHTML = `<option value="">${T[lang].alld}</option>` + ds.map(d => `<option value="${d}"${d===dist?" selected":""}>${dname(d)}</option>`).join("");
+}
+$("dist").onchange = e => {
+  dist = e.target.value; render();
+  if (hiDist){ map.removeLayer(hiDist); hiDist = null; }
+  if (dist){ const f = DISTRICTS.features.find(f => f.properties.n === dist);
+    hiDist = L.geoJSON(f, {style:{color:"#E8A33A", weight:3, fillColor:"#E8A33A", fillOpacity:.08}, interactive:false}).addTo(map);
+    map.flyToBounds(hiDist.getBounds(), {padding:[30,30], duration:.8}); }
+  else map.flyToBounds(SL, {duration:.8});
+};
+$("q").oninput = e => { q = e.target.value; render(); };
+function buildMonth(){
+  $("month").innerHTML = `<option value="0">${T[lang].anym}</option>` + MN[lang].map((m, i) => `<option value="${i+1}"${month===i+1?" selected":""}>${T[lang].goin} ${m}${i+1===NOWM ? " · " + T[lang].thism : ""}</option>`).join("");
+  $("month").value = month; $("month").parentElement.classList.toggle("on", !!month);
+}
+$("month").onchange = e => { month = +e.target.value; buildMonth(); render(); };
+$("reset").onclick = e => { e.preventDefault(); q = ""; $("q").value = ""; cat = "all"; dist = ""; month = 0; buildMonth(); buildChips(); buildDist(); $("dist").onchange({target:{value:""}}); };
+
+let meMarker = null;
+$("near").onclick = () => {
+  if (!navigator.geolocation) return toast(T[lang].locfail);
+  toast(T[lang].locating);
+  navigator.geolocation.getCurrentPosition(pos => {
+    me = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+    if (meMarker) meMarker.remove();
+    meMarker = L.marker([me.lat, me.lng], {icon:L.divIcon({className:"", html:'<div class="me"></div>', iconSize:[18,18], iconAnchor:[9,9]}), zIndexOffset:1000}).addTo(map).bindTooltip(T[lang].you);
+    render(); const r = filtered().slice(0,5);
+    map.flyToBounds(L.latLngBounds([[me.lat, me.lng], ...r.map(p => [p.lat, p.lng])]), {padding:[40,40], maxZoom:12, duration:.8});
+  }, () => toast(T[lang].locfail), {enableHighAccuracy:true, timeout:10000});
+};
+$("foodNear").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("restaurants near me");
+
+// ---------------- language ----------------
+function setLang(l){
+  lang = l; document.documentElement.lang = l; store.set("lang", l);
+  document.querySelectorAll("[data-i]").forEach(el => { const v = T[l][el.dataset.i]; if (typeof v === "string") el.textContent = v; });
+  document.title = T[l].title + (l === "en" ? " · ලංකා ගමන් සිතියම" : " · Sri Lanka Travel Map");
+  $("q").placeholder = T[l].q;
+  document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.l === l));
+  $("legend").innerHTML = Object.values(CATS).map(v => `<span><i style="background:${v.c}">${v.e}</i>${v[l]}</span>`).join("");
+  if (isIOS && !standalone) $("inst_s").textContent = T[l].i_ios;
+  buildChips(); buildDist(); buildMonth(); refreshAll();
+  distMarkers.forEach(m => m.setIcon(labelIcon(m.dn))); showLabels();
+  renderVis(); if (railOn){ drawRail(); } setMoreLabel(); if ($("sos").classList.contains("open") && !$("sosList").hidden) renderSos();
+}
+document.querySelectorAll(".lang button").forEach(b => b.onclick = () => setLang(b.dataset.l));
+
+// ---------------- installable app ----------------
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(() => {});
+const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+let deferred = null;
+const showInst = () => { if (!standalone && !store.get("inst_closed")) setTimeout(() => $("inst").classList.add("show"), 5000); };
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; $("instLink").hidden = false; showInst(); });
+async function doInstall(e){ e && e.preventDefault(); if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $("inst").classList.remove("show"); $("instLink").hidden = true; }
+$("inst_go").onclick = doInstall; $("instLink").onclick = doInstall;
+$("inst_x").onclick = () => { $("inst").classList.remove("show"); store.set("inst_closed", "1"); };
+addEventListener("appinstalled", () => { $("inst").classList.remove("show"); $("instLink").hidden = true; });
+if (isIOS && !standalone){ $("inst").classList.add("ios"); showInst(); }
+
+// ---------------- start ----------------
+const saved = store.get("lang"), nav = (navigator.language || "").slice(0,2);
+setLang(["si","ta","en"].includes(saved) ? saved : nav === "ta" ? "ta" : "si");
+saveTrip(); saveVis();
+const hraw = location.hash.slice(1), h = hraw.startsWith("trip=") ? hraw : decodeURIComponent(hraw);
+if (h.startsWith("trip=")){
+  const ids = h.slice(5).split(",").map(x => { try { return decodeURIComponent(x); } catch(e){ return x; } }).filter(id => getP(id));
+  if (ids.length){ trip = ids; saveTrip(); refreshAll(); toast(T[lang].tshared); setTimeout(openTrip, 400); }
+} else if (h && markers[h]) setTimeout(() => select(h, true), 300);
+</script>
+</body>
+</html>
