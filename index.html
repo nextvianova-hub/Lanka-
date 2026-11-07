@@ -449,13 +449,15 @@ const SL = L.latLngBounds([5.85, 79.5], [9.9, 81.95]);
 const map = L.map("map", {zoomControl:true, minZoom:7, maxZoom:19, maxBounds:SL.pad(0.4)}).fitBounds(SL);
 // Built-in base map: always works, even offline or when opened from a file.
 map.createPane("labels"); map.getPane("labels").style.zIndex = 450; map.getPane("labels").style.pointerEvents = "none";
-L.geoJSON(DISTRICTS, {style:{color:"#7FA79E", weight:1, fillColor:"#F4F1E8", fillOpacity:1}, interactive:false,
+map.createPane("base"); map.getPane("base").style.zIndex = 150;   // below the street-map tiles (200)
+L.geoJSON(DISTRICTS, {pane:"base", style:{color:"#7FA79E", weight:1, fillColor:"#F4F1E8", fillOpacity:1}, interactive:false,
   attribution:'Boundaries: geoBoundaries / &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL)'}).addTo(map);
 const labelIcon = n => L.divIcon({className:"dlabel", html:`<span>${dname(n)}</span>`, iconSize:[120,20], iconAnchor:[60,10]});
 const distMarkers = DISTRICTS.features.map(f => L.marker([f.properties.lat, f.properties.lng], {pane:"labels", interactive:false, keyboard:false, icon:labelIcon(f.properties.n)}));
 distMarkers.forEach((m, i) => m.dn = DISTRICTS.features[i].properties.n);
 const distLabels = L.layerGroup(distMarkers);
-const showLabels = () => map.getZoom() >= 8 ? distLabels.addTo(map) : distLabels.remove();
+let tilesOk = false;
+const showLabels = () => map.getZoom() >= 8 && !tilesOk ? distLabels.addTo(map) : distLabels.remove();
 map.on("zoomend", showLabels);
 // Street map on top, only when the site is online (OpenStreetMap blocks pages opened from a file).
 if (location.protocol.startsWith("http")){
@@ -463,8 +465,8 @@ if (location.protocol.startsWith("http")){
   let ok = 0, bad = 0;
   const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, maxNativeZoom:19, keepBuffer:4, updateWhenZooming:false,
       attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
-    .on("tileload", () => ok++)
-    .on("tileerror", () => { if (!ok && ++bad > 20) map.removeLayer(osm); }).addTo(map);
+    .on("tileload", () => { if (!ok++){ tilesOk = true; showLabels(); } })
+    .on("tileerror", () => { if (!ok && ++bad > 20){ map.removeLayer(osm); tilesOk = false; showLabels(); } }).addTo(map);
   L.geoJSON(DISTRICTS, {style:{color:"#0E4D45", weight:1, opacity:.45, fillOpacity:0}, interactive:false}).addTo(map);
 }
 let hiDist = null, tripLine = null;

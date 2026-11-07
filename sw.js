@@ -1,5 +1,5 @@
 // Lanka Travel Map – offline support. Change VERSION after every update.
-const VERSION = "lankamap-v7";
+const VERSION = "lankamap-v8";
 const TILES = "lankamap-photos";
 const MAX_TILES = 600;
 const CORE = ["./", "index.html", "data.js", "manifest.webmanifest", "lib/leaflet.js", "lib/leaflet.css",
