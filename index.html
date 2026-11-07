@@ -446,7 +446,7 @@ $("tripShow").onclick = () => { closeTrip(); if (trip.length) map.flyToBounds(L.
 
 // ---------------- map ----------------
 const SL = L.latLngBounds([5.85, 79.5], [9.9, 81.95]);
-const map = L.map("map", {zoomControl:true, minZoom:7, maxZoom:18, maxBounds:SL.pad(0.4)}).fitBounds(SL);
+const map = L.map("map", {zoomControl:true, minZoom:7, maxZoom:19, maxBounds:SL.pad(0.4)}).fitBounds(SL);
 // Built-in base map: always works, even offline or when opened from a file.
 map.createPane("labels"); map.getPane("labels").style.zIndex = 450; map.getPane("labels").style.pointerEvents = "none";
 L.geoJSON(DISTRICTS, {style:{color:"#7FA79E", weight:1, fillColor:"#F4F1E8", fillOpacity:1}, interactive:false,
@@ -459,9 +459,12 @@ const showLabels = () => map.getZoom() >= 8 ? distLabels.addTo(map) : distLabels
 map.on("zoomend", showLabels);
 // Street map on top, only when the site is online (OpenStreetMap blocks pages opened from a file).
 if (location.protocol.startsWith("http")){
-  let bad = 0;
-  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:18, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
-    .on("tileerror", () => { if (++bad > 8) map.removeLayer(osm); }).addTo(map);
+  // Only give up on the street map if NOT ONE tile has ever loaded (e.g. the server blocks this site).
+  let ok = 0, bad = 0;
+  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, maxNativeZoom:19, keepBuffer:4, updateWhenZooming:false,
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'})
+    .on("tileload", () => ok++)
+    .on("tileerror", () => { if (!ok && ++bad > 20) map.removeLayer(osm); }).addTo(map);
   L.geoJSON(DISTRICTS, {style:{color:"#0E4D45", weight:1, opacity:.45, fillOpacity:0}, interactive:false}).addTo(map);
 }
 let hiDist = null, tripLine = null;

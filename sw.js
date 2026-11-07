@@ -1,6 +1,6 @@
 // Lanka Travel Map – offline support. Change VERSION after every update.
-const VERSION = "lankamap-v6";
-const TILES = "lankamap-tiles";
+const VERSION = "lankamap-v7";
+const TILES = "lankamap-photos";
 const MAX_TILES = 600;
 const CORE = ["./", "index.html", "data.js", "manifest.webmanifest", "lib/leaflet.js", "lib/leaflet.css",
   "lib/leaflet.markercluster.js", "lib/MarkerCluster.css", "img/icon-192.png", "img/icon-512.png"];
@@ -21,7 +21,8 @@ self.addEventListener("fetch", e => {
       .catch(() => caches.match("index.html")));
     return;
   }
-  if (url.host === "upload.wikimedia.org" || url.host === "tile.openstreetmap.org"){
+  // Map tiles are NOT handled here: the browser loads them straight from OpenStreetMap.
+  if (url.host === "upload.wikimedia.org"){
     e.respondWith(caches.open(TILES).then(c => c.match(req).then(hit => hit || fetch(req).then(r => { if (r.ok || r.type === "opaque"){ c.put(req, r.clone()); trimTiles(); } return r; }))));
     return;
   }
