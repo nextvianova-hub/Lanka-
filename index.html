@@ -6,11 +6,21 @@
 <title>ලංකා ගමන් සිතියම · Sri Lanka Travel Map</title>
 <meta name="description" content="ශ්‍රී ලංකාවේ සංචාරක ස්ථාන සහ ප්‍රාදේශීය කෑම හොයාගන්න නොමිලේ සිතියමක්. A free map of places to visit and local food across Sri Lanka.">
 <meta name="theme-color" content="#0E4D45">
-<link rel="canonical" href="https://lkmap.pages.dev/">
-<meta property="og:title" content="ලංකා ගමන් සිතියම · Sri Lanka Travel Map">
-<meta property="og:description" content="ශ්‍රී ලංකාවේ සංචාරක ස්ථාන සහ ප්‍රාදේශීය කෑම, එකම සිතියමක. නොමිලේ.">
+<meta property="og:site_name" content="ලංකා ගමන් සිතියම">
+<meta property="og:type" content="website">
 <meta property="og:url" content="https://lkmap.pages.dev/">
-<meta property="og:image" content="https://lkmap.pages.dev/img/icon-512.png">
+<meta property="og:title" content="ලංකා ගමන් සිතියම · Sri Lanka Travel Map">
+<meta property="og:description" content="සංචාරක ස්ථාන, සැඟවුණු තැන් සහ ප්‍රාදේශීය කෑම — එක සිතියමක. නොමිලේ, සිංහල · தமிழ் · English.">
+<meta property="og:image" content="https://lkmap.pages.dev/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ලංකා ගමන් සිතියම">
+<meta property="og:locale" content="si_LK">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://lkmap.pages.dev/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"ලංකා ගමන් සිතියම","alternateName":["Sri Lanka Travel Map","lkmap.pages.dev"],"url":"https://lkmap.pages.dev/"}
+</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="img/icon-192.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -53,6 +63,12 @@ aside{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidde
 .chip{flex:none;display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--ink);white-space:nowrap}
 .chip i{width:10px;height:10px;border-radius:50%;display:inline-block}
 .chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.modesw{display:flex;gap:6px;background:#EFEAE0;border-radius:999px;padding:4px}
+.modesw button{flex:1;min-width:0;border:0;background:none;border-radius:999px;padding:8px 6px;font:700 13px Manrope,sans-serif;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modesw button.on{background:#fff;color:var(--teal);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.modesw button span{font-weight:800;font-size:12px}
+.hidnote{font-size:12px;color:var(--muted);line-height:1.5;background:#FBF7EF;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+html[lang=ta] .modesw button,html[lang=si] .modesw button{font-size:12.5px}
 .row{display:flex;gap:8px}
 .row select{flex:1;min-width:0;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;font-size:14px;background:#fff}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:12px;padding:10px 14px;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;white-space:nowrap;min-width:0}
@@ -79,6 +95,7 @@ html[lang=ta] .chip{font-size:12.5px;padding:6px 10px}html[lang=ta] .btn{font-si
 .dlabel span{display:block;text-align:center;font-size:11.5px;font-weight:700;color:#4E6A63;text-shadow:0 0 3px #F4F1E8,0 0 3px #F4F1E8;white-space:nowrap}
 .leaflet-container{font-family:inherit}
 .pin{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);transition:transform .15s;position:relative}
+.pin.hid{border-style:dashed;border-width:2.5px}
 .pin.sel{transform:scale(1.35);box-shadow:0 0 0 4px rgba(14,77,69,.35),0 2px 6px rgba(0,0,0,.35)}
 .pin .no{position:absolute;top:-8px;right:-8px;background:var(--accent);color:#2A1A00;font:800 11px Manrope,sans-serif;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;border:2px solid #fff}
 .clu{width:40px;height:40px;border-radius:50%;background:var(--teal);color:#fff;font:800 14px Manrope,sans-serif;display:grid;place-items:center;border:3px solid #fff;box-shadow:0 0 0 5px rgba(14,77,69,.25),0 2px 8px rgba(0,0,0,.3)}
@@ -123,7 +140,7 @@ html[lang=ta] .chip{font-size:12.5px;padding:6px 10px}html[lang=ta] .btn{font-si
 .trip{position:fixed;top:0;right:0;bottom:0;width:390px;max-width:100%;background:#fff;z-index:1600;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;box-shadow:-10px 0 30px rgba(0,0,0,.15)}
 .trip.open{transform:none}
 .trip-h{display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid var(--line)}
-.trip-h b{font-size:18px} #tripClose,#visClose,#sosClose{min-width:44px;min-height:44px;margin-right:-10px} #tripClose,#visClose,#sosClose{min-width:44px;min-height:44px;margin-right:-10px}
+.trip-h b{font-size:18px} #tripClose,#visClose,#sosClose{min-width:44px;min-height:44px;margin-right:-10px}
 .trip-h button{margin-left:auto;border:0;background:none;font-size:26px;cursor:pointer;color:var(--muted);line-height:1}
 .trip-list{flex:1;overflow-y:auto}
 .tl{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
@@ -135,6 +152,21 @@ html[lang=ta] .chip{font-size:12.5px;padding:6px 10px}html[lang=ta] .btn{font-si
 .trip-f{padding:14px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:grid;gap:8px}
 .trip-f p{font-size:12px;color:var(--muted);line-height:1.5}
 .trip-empty{padding:30px 20px;color:var(--muted);text-align:center;line-height:1.6}
+.sug-f{padding:16px;display:grid;gap:12px;overflow-y:auto;flex:1;align-content:start}
+#sugForm[hidden],#sugFoot[hidden]{display:none}
+.sug-f label{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--ink)}
+.sug-f input,.sug-f textarea{font:inherit;font-size:14.5px;font-weight:400;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;background:#fff;color:var(--ink);width:100%}
+.sug-f textarea{min-height:92px;resize:vertical}
+.sug-f input:focus,.sug-f textarea:focus{outline:2px solid var(--teal);outline-offset:1px;border-color:transparent}
+.sug-f .opt{font-weight:400;color:var(--muted)}
+.sug-intro{font-size:13px;color:var(--muted);line-height:1.6}
+.trap{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.sug-err{color:#B3261E;font-size:13px;line-height:1.5}
+.sug-ok{padding:40px 24px;text-align:center;line-height:1.7;color:var(--ink)}
+.sug-ok b{display:block;font-size:19px;margin-bottom:8px}
+.addcard{margin:14px 16px 24px;border:1.5px dashed var(--line);border-radius:16px;padding:16px;text-align:center;display:grid;gap:10px;justify-items:center}
+.addcard p{font-size:13.5px;color:var(--muted);line-height:1.6}
+.popfix{display:block;margin-top:10px;font:600 12.5px inherit;color:var(--muted);text-decoration:underline;background:none;border:0;cursor:pointer;padding:6px 0;min-height:32px}
 /* install */
 .inst{position:fixed;left:16px;bottom:16px;z-index:1400;display:none;align-items:center;gap:12px;background:#fff;border-radius:16px;padding:10px 12px;box-shadow:0 12px 34px rgba(0,0,0,.25);max-width:420px;width:calc(100% - 32px)}
 .inst.show{display:flex}
@@ -164,7 +196,7 @@ html[lang=ta] .chip{font-size:12.5px;padding:6px 10px}html[lang=ta] .btn{font-si
 .rail-pop h3{font-size:16px;margin-bottom:6px}.rail-pop p{font-size:13.5px;line-height:1.55;margin:0 0 8px!important}.rail-pop small{color:var(--muted);font-size:11.5px}
 /* more places (OpenStreetMap) */
 .more-btn{background:#fff;border:0;border-radius:999px;padding:8px 13px;font:700 13px inherit;font-family:inherit;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.28);color:var(--teal);display:flex;align-items:center;gap:6px;white-space:nowrap}
-.more-btn.off{color:#8B9692}
+.more-btn.off{color:#6B7673}
 .more-btn.busy{opacity:.75;cursor:progress}
 .more-wrap{display:flex;gap:6px}
 .more-x{background:#fff;border:0;border-radius:999px;width:34px;font-size:15px;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.28);color:var(--muted)}
@@ -205,13 +237,14 @@ html[lang=ta] .chip{font-size:12.5px;padding:6px 10px}html[lang=ta] .btn{font-si
   .list{overflow:visible}
   .brand small{display:none}.brand b{font-size:15.5px}
   .hbtn{padding:7px 9px}.hbtn .lbl{display:none}
-  .photo{height:120px} .leaflet-popup-content{max-height:calc(52vh - 100px);overflow-y:auto;overscroll-behavior:contain}
+  .photo{height:120px}
+  .leaflet-popup-content{max-height:calc(52vh - 100px);overflow-y:auto;overscroll-behavior:contain}
   #map:has(.leaflet-popup) .more-wrap,#map:has(.leaflet-popup) .rail-btn,#map:has(.leaflet-popup) .leaflet-control-zoom{visibility:hidden}
 }
 @media (max-width:480px){
   .brand>div{display:none}
   .lang button{padding:6px 8px;font-size:12px}
-  .leaflet-control.legend{display:none} .leaflet-control-attribution{font-size:9px;line-height:1.3} .leaflet-control-attribution{font-size:9px;line-height:1.3}
+  .leaflet-control.legend{display:none} .leaflet-control-attribution{font-size:9px;line-height:1.3}
   .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
   .chips::-webkit-scrollbar{display:none}
 }
@@ -234,6 +267,7 @@ html[lang=ta] .chip{font-size:12.5px;padding:6px 10px}html[lang=ta] .btn{font-si
     <div class="tools">
       <label class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5D6B67" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
         <input id="q" type="search" autocomplete="off"></label>
+      <div class="modesw" id="modesw"></div>
       <div class="chips" id="chips"></div>
       <div class="row">
         <select id="dist" aria-label="District"></select>
@@ -272,6 +306,24 @@ html[lang=ta] .chip{font-size:12.5px;padding:6px 10px}html[lang=ta] .btn{font-si
   <div class="trip-f"><button class="btn btn-teal" id="visShare" data-i="vshare"></button><p data-i="vnote"></p></div>
 </section>
 
+<section class="trip" id="sug" aria-label="Suggest a place">
+  <div class="trip-h">✏️ <b data-i="sug_t"></b><button id="sugClose" aria-label="Close">×</button></div>
+  <form class="sug-f" id="sugForm" novalidate>
+    <p class="sug-intro" data-i="sug_s"></p>
+    <label><span data-i="sug_f1"></span><input id="sgName" maxlength="120" autocomplete="off"></label>
+    <label><span data-i="sug_f2"></span><input id="sgArea" maxlength="120" autocomplete="off"></label>
+    <label><span data-i="sug_f3"></span><textarea id="sgMsg" maxlength="1200"></textarea></label>
+    <label><span data-i="sug_f4"></span><input id="sgFrom" maxlength="120" autocomplete="off"></label>
+    <input class="trap" type="text" id="sgTrap" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="sug-err" id="sgErr" hidden></div>
+  </form>
+  <div class="trip-f" id="sugFoot">
+    <button class="btn btn-teal" id="sgSend" data-i="sug_send"></button>
+    <a class="btn btn-light" id="sgWa" target="_blank" rel="noopener" hidden data-i="sug_wa"></a>
+    <p data-i="sug_p"></p>
+  </div>
+</section>
+
 <!-- emergency -->
 <div class="sos-sheet" id="sos" role="dialog" aria-modal="true" aria-labelledby="sosTitle">
   <div class="sos-box">
@@ -299,6 +351,66 @@ html[lang=ta] .chip{font-size:12.5px;padding:6px 10px}html[lang=ta] .btn{font-si
 <script src="lib/leaflet.markercluster.js"></script>
 <script src="data.js"></script>
 <script>
+// ---- Ravana story places & links (ravana-lanka.pages.dev) ----
+const RV = "https://ravana-lanka.pages.dev/"; // Ravana website address - change here if it changes
+const RV_NEW = [
+ {
+  "id": "ravana-cave",
+  "c": "heritage",
+  "d": "Badulla",
+  "lat": 6.8645,
+  "lng": 81.0486,
+  "en": "Ravana Cave, Ella",
+  "si": "රාවණා ගුහාව, ඇල්ල",
+  "ta": "இராவணன் குகை, எல்ல",
+  "den": "A hillside cave near Ella, reached by about 650 steps. Folklore says Ravana hid Sita here; excavations found signs of people living here some 25,000 years ago.",
+  "dsi": "පඩි 650ක් පමණ නැගලා යන, ඇල්ල අසල කඳු බෑවුමේ ගුහාවක්. රාවණා සීතාව සඟවා තැබූ තැන කියලා ජනප්‍රවාදයේ කියවෙනවා; කැණීම්වලින් අවුරුදු 25,000ක් පමණ පැරණි මිනිස් වාසයට සාක්ෂි හමු වුණා.",
+  "dta": "சுமார் 650 படிகள் ஏறிச் செல்லும், எல்ல அருகிலுள்ள மலைச்சரிவுக் குகை. இராவணன் சீதையை இங்கே மறைத்தான் என்பது மரபுக்கதை; அகழ்வுகளில் சுமார் 25,000 ஆண்டுகள் பழைய மனித வாழ்வின் சான்றுகள் கிடைத்தன."
+ },
+ {
+  "id": "ussangoda",
+  "c": "nature",
+  "d": "Hambantota",
+  "lat": 6.0972,
+  "lng": 80.9889,
+  "en": "Ussangoda National Park",
+  "si": "උස්සන්ගොඩ ජාතික වනෝද්‍යානය",
+  "ta": "உஸ்ஸங்கொட தேசியப் பூங்கா",
+  "den": "A rare red serpentine-soil plain on a sea cliff near Ambalantota. Legend says Ravana's vimana landed here.",
+  "dsi": "අම්බලන්තොට අසල, මුහුදු කඳු මුදුනේ ඇති දුර්ලභ රතු සර්පන්ටයින් පස් තැනිතලාවක්. රාවණාගේ විමානය ගොඩබැස්සූ තැන කියලා ජනප්‍රවාදයේ කියවෙනවා.",
+  "dta": "அம்பலாந்தோட்டை அருகே கடல் குன்றின் மேல் உள்ள அரிய சிவப்பு சர்ப்பன்டைன் மண் சமவெளி. இராவணனின் விமானம் இங்கே இறங்கியது என்பது மரபுக்கதை."
+ },
+ {
+  "id": "seetha-amman",
+  "c": "temple",
+  "d": "Nuwara Eliya",
+  "lat": 6.9332,
+  "lng": 80.8105,
+  "en": "Seetha Amman Temple, Sita Eliya",
+  "si": "සීතා අම්මන් කෝවිල, සීතා එළිය",
+  "ta": "சீதை அம்மன் கோயில், சீதா எலிய",
+  "den": "A colourful Hindu temple near Hakgala, believed to mark the Ashoka grove where Sita was held. Built by Tamil plantation workers in the 19th century.",
+  "dsi": "සීතාව සිරකර තිබූ අශෝක වනය මෙතන කියලා විශ්වාස කරන, හක්ගල අසල වර්ණවත් හින්දු කෝවිල. 19 වන සියවසේ වතුකරයේ දෙමළ ජනතාව ඉදිකළා.",
+  "dta": "சீதை சிறைவைக்கப்பட்ட அசோக வனம் இதுவே என்று நம்பப்படும், ஹக்கல அருகிலுள்ள வண்ணமயமான இந்துக் கோயில். 19ஆம் நூற்றாண்டில் மலையகத் தோட்டத் தமிழ் மக்கள் கட்டினர்."
+ },
+ {
+  "id": "divurumpola",
+  "c": "temple",
+  "d": "Nuwara Eliya",
+  "lat": 6.903,
+  "lng": 80.885,
+  "en": "Divurumpola Temple",
+  "si": "දිවුරුම්පොළ රජ මහා විහාරය",
+  "ta": "திவுரும்பொல விகாரை",
+  "den": "A Buddhist temple near Welimada, believed to be where Sita faced the trial by fire. The name means “place of oath”.",
+  "dsi": "සීතා දේවිය අග්නි පරීක්ෂාවට මුහුණ දුන් තැන කියලා විශ්වාස කරන, වැලිමඩ අසල බෞද්ධ විහාරයක්. නමේ තේරුම “දිවුරුම් දෙන තැන”.",
+  "dta": "சீதை அக்னிப் பரீட்சையை எதிர்கொண்ட இடம் என்று நம்பப்படும், வெலிமடை அருகிலுள்ள பௌத்த விகாரை. பெயரின் பொருள் “சத்தியம் செய்யும் இடம்”."
+ }
+];
+RV_NEW.forEach(n => { if (!PLACES.some(x => x.id === n.id)) PLACES.push(n); });
+const RV_LINK = {"sigiriya": "places", "ravana-falls": "places", "koneswaram": "places", "kelaniya": "family", "sri-pada": "buddha", "hakgala": "places", "ravana-cave": "places", "ussangoda": "places", "seetha-amman": "places", "divurumpola": "places"};
+PLACES.forEach(p => { if (RV_LINK[p.id]) p.rv = RV_LINK[p.id]; });
+// ----------------------------------------------------------------
 const CATS = {
   heritage:{c:"#E07A1F", e:"🏛", si:"උරුම", ta:"மரபுரிமை", en:"Heritage"},
   temple:  {c:"#C9A100", e:"🙏", si:"පූජනීය", ta:"புனிதத் தலங்கள்", en:"Sacred"},
@@ -313,8 +425,8 @@ const DN = {
  ta:{Ampara:"அம்பாறை",Anuradhapura:"அனுராதபுரம்",Badulla:"பதுளை",Batticaloa:"மட்டக்களப்பு",Colombo:"கொழும்பு",Galle:"காலி",Gampaha:"கம்பஹா",Hambantota:"அம்பாந்தோட்டை",Jaffna:"யாழ்ப்பாணம்",Kalutara:"களுத்துறை",Kandy:"கண்டி",Kegalle:"கேகாலை",Kilinochchi:"கிளிநொச்சி",Kurunegala:"குருணாகல்",Mannar:"மன்னார்",Matale:"மாத்தளை",Matara:"மாத்தறை",Monaragala:"மொனராகலை",Mullaitivu:"முல்லைத்தீவு","Nuwara Eliya":"நுவரெலியா",Polonnaruwa:"பொலன்னறுவை",Puttalam:"புத்தளம்",Ratnapura:"இரத்தினபுரி",Trincomalee:"திருகோணமலை",Vavuniya:"வவுனியா"}
 };
 const T = {
-  si:{osmbtn:"මෙතන තව තැන්", osmzoomshort:"zoom කරන්න", osmzoom:"තව තැන් පෙන්වන්න සිතියම තව ටිකක් zoom කරන්න.", osmload:"සොයමින්…", osmfail:"තැන් ලබාගන්න බැරි වුණා. ටිකකින් නැවත උත්සාහ කරන්න.", osmsame:"මේ ප්‍රදේශයේ තැන් දැනටමත් පෙන්වනවා. සිතියම වෙනත් තැනකට ගෙනිහින් ආයෙ ඔබන්න.", osmfound:n=>`තව තැන් ${n}ක් හම්බුණා`, osmnone:"මේ ප්‍රදේශයේ අලුත් තැන් හම්බුණේ නැහැ.", osmnote:"මෙම තොරතුරු OpenStreetMap ප්‍රජාවෙන්. අප පරීක්ෂා කර නැහැ.", osmsrc:"OpenStreetMap", visited:"මම ගිය තැන්", vyes:"⭐ මම ගියා", vno:"☆ මම ගියා නම් ලකුණු කරන්න", vof:(n,f,fn)=>`/ තැන් ${n} · රස බැලූ කෑම ${f}/${fn}`, vempty:"තාම ලකුණු කළ තැන් නැහැ. ස්ථානයක් එබුවම \"☆ මම ගියා\" ඔබන්න.", vshare:"🔗 මගේ ලකුණු බෙදාගන්න", vnote:"මේ ලැයිස්තුව ඔබේ phone එකේ පමණක් ගබඩා වෙනවා.", vtext:(n,t)=>`මම ලංකාවේ තැන් ${t}න් ${n}කට ගිහින්! 🇱🇰 ඔයා කීයකට ගිහින්ද?`, photo:"Wikimedia", railon:"ලස්සන දුම්රිය මාර්ග පෙන්වනවා. ඉරක් එබුවම විස්තර පේනවා.", railnote:"මාර්ගය දළ වශයෙන් (දුම්රියපොළවල් අතර) දක්වා ඇත. දුම්රිය වේලාවන් සහ ටිකට් ශ්‍රී ලංකා දුම්රිය සේවයෙන් පරීක්ෂා කරන්න.", sos:"හදිසි අවස්ථා", tapcall:"අමතන්න ඔබන්න", hosp:"ළඟම රෝහල", pol:"ළඟම පොලිසිය", myloc:"මම ඉන්න තැන යවන්න", mylocmsg:"මම දැන් ඉන්නේ මෙතැන:", hold:"📞 අමතන්න ඔබාගෙන ඉන්න", holding:"දිගටම ඔබාගෙන ඉන්න…", calling:"අමතමින්", holdhelp:"වැරදිලාවත් call එකක් නොයන්න, බොත්තම තත්පරයක් පමණ ඔබාගෙන ඉන්න.", cancel:"අවලංගු කරන්න", sosnote:"අංක ශ්‍රී ලංකා පොලිසිය සහ නිල මූලාශ්‍ර අනුව. හදිසි අවස්ථාවකදී මුලින්ම 119 හෝ 1990 අමතන්න.", best:"යන්න හොඳම කාලය", allyear:"අවුරුද්ද පුරාම", anym:"ඕනෑම මාසයක", goin:"යන්නේ:", thism:"මේ මාසය", wxload:"කාලගුණය ලබාගනිමින්…", wxfail:"කාලගුණය ලබාගන්න බැරි වුණා (internet අවශ්‍යයි).", wxsrc:"කාලගුණ දත්ත:", today:"අද", tomorrow:"හෙට", title:"ලංකා ගමන් සිතියම", sub:"සංචාරක ස්ථාන සහ ප්‍රාදේශීය කෑම, එකම සිතියමක", q:"ස්ථානයක් හොයන්න… (උදා: සීගිරිය, ඇල්ල)", all:"සියල්ල", alld:"සියලු දිස්ත්‍රික්ක",
-      near:"මට ළඟම", foodnear:"මට ළඟම කෑම කඩ හොයන්න", reset:"සියල්ල පෙන්වන්න", count:n=>`ස්ථාන ${n}ක්`, empty:"ගැලපෙන ස්ථාන නැහැ. වෙනත් වචනයක් හෝ කාණ්ඩයක් උත්සාහ කරන්න.",
+  si:{osmbtn:"මෙතන තව තැන්", osmzoomshort:"තව තැන් බලන්න zoom කරන්න", osmzoom:"තව තැන් පෙන්වන්න සිතියම තව ටිකක් zoom කරන්න.", osmload:"සොයමින්…", osmfail:"තැන් ලබාගන්න බැරි වුණා. ටිකකින් නැවත උත්සාහ කරන්න.", osmsame:"මේ ප්‍රදේශයේ තැන් දැනටමත් පෙන්වනවා. සිතියම වෙනත් තැනකට ගෙනිහින් ආයෙ ඔබන්න.", osmfound:n=>`තව තැන් ${n}ක් හම්බුණා`, osmnone:"මේ ප්‍රදේශයේ අලුත් තැන් හම්බුණේ නැහැ.", osmnote:"මෙම තොරතුරු OpenStreetMap ප්‍රජාවෙන්. අප පරීක්ෂා කර නැහැ.", osmsrc:"OpenStreetMap", visited:"මම ගිය තැන්", vyes:"⭐ මම ගියා", vno:"☆ මම ගියා නම් ලකුණු කරන්න", vof:(n,f,fn)=>`/ තැන් ${n} · රස බැලූ කෑම ${f}/${fn}`, vempty:"තාම ලකුණු කළ තැන් නැහැ. ස්ථානයක් එබුවම \"☆ මම ගියා\" ඔබන්න.", vshare:"🔗 මගේ ලකුණු බෙදාගන්න", vnote:"මේ ලැයිස්තුව ඔබේ phone එකේ පමණක් ගබඩා වෙනවා.", vtext:(n,t)=>`මම ලංකාවේ තැන් ${t}න් ${n}කට ගිහින්! 🇱🇰 ඔයා කීයකට ගිහින්ද?`, photo:"Wikimedia", railon:"ලස්සන දුම්රිය මාර්ග පෙන්වනවා. ඉරක් එබුවම විස්තර පේනවා.", railnote:"මාර්ගය දළ වශයෙන් (දුම්රියපොළවල් අතර) දක්වා ඇත. දුම්රිය වේලාවන් සහ ටිකට් ශ්‍රී ලංකා දුම්රිය සේවයෙන් පරීක්ෂා කරන්න.", sos:"හදිසි අවස්ථා", tapcall:"අමතන්න ඔබන්න", hosp:"ළඟම රෝහල", pol:"ළඟම පොලිසිය", myloc:"මම ඉන්න තැන යවන්න", mylocmsg:"මම දැන් ඉන්නේ මෙතැන:", hold:"📞 අමතන්න ඔබාගෙන ඉන්න", holding:"දිගටම ඔබාගෙන ඉන්න…", calling:"අමතමින්", holdhelp:"වැරදිලාවත් call එකක් නොයන්න, බොත්තම තත්පරයක් පමණ ඔබාගෙන ඉන්න.", cancel:"අවලංගු කරන්න", sosnote:"අංක ශ්‍රී ලංකා පොලිසිය සහ නිල මූලාශ්‍ර අනුව. හදිසි අවස්ථාවකදී මුලින්ම 119 හෝ 1990 අමතන්න.", best:"යන්න හොඳම කාලය", allyear:"අවුරුද්ද පුරාම", anym:"ඕනෑම මාසයක", goin:"යන්නේ:", thism:"මේ මාසය", wxload:"කාලගුණය ලබාගනිමින්…", wxfail:"කාලගුණය ලබාගන්න බැරි වුණා (internet අවශ්‍යයි).", wxsrc:"කාලගුණ දත්ත:", today:"අද", tomorrow:"හෙට", title:"ලංකා ගමන් සිතියම", sub:"සංචාරක ස්ථාන සහ ප්‍රාදේශීය කෑම, එකම සිතියමක", q:"ස්ථානයක් හොයන්න… (උදා: සීගිරිය, ඇල්ල)", all:"සියල්ල", alld:"සියලු දිස්ත්‍රික්ක",
+      wa_p:"ස්ථානය",wa_a:"ප්‍රදේශය",wa_m:"විස්තරය",sug_t:"තැනක් එකතු කරන්න",sug_t2:"වැරදි තොරතුරක්ද?",sug_s:"ඔයා දන්න ලස්සන තැනක් මෙහි නැද්ද? නැත්නම් මොකක් හරි වැරදිද? අපට කියන්න, අපි බලලා එකතු කරනවා.",sug_f1:"ස්ථානයේ නම",sug_f2:"ප්‍රදේශය / දිස්ත්‍රික්කය <span class=\"opt\">(අවශ්‍ය නැහැ)</span>",sug_f3:"විස්තරය <span class=\"opt\">(අවශ්‍ය නැහැ)</span>",sug_f4:"ඔයාගේ නම හෝ WhatsApp අංකය <span class=\"opt\">(අවශ්‍ය නැහැ)</span>",sug_send:"යවන්න",sug_wa:"WhatsApp එකෙන් කියන්න",sug_p:"ඔයාගේ විස්තර අපි වෙන කාටවත් දෙන්නේ නැහැ.",sug_need:"ස්ථානයේ නම ලියන්න.",sug_slow:"පොඩ්ඩක් ඉඳලා ආයේ උත්සාහ කරන්න.",sug_sending:"යවනවා…",sug_ok1:"ස්තුතියි! 🙏",sug_ok2:"ඔයාගේ යෝජනාව ලැබුණා. අපි බලලා සිතියමට එකතු කරනවා.",sug_fail:"යවන්න බැරි වුණා. Internet එක බලලා ආයේ උත්සාහ කරන්න.",sug_fix:"⚠ මේ තොරතුරු වැරදිද? කියන්න",sug_wamsg:"ආයුබෝවන්! ලංකා ගමන් සිතියම ගැන:",add_s:"ඔයා දන්න තැනක් මෙහි නැද්ද?",add_b:"✏️ තැනක් එකතු කරන්න",m_pop:"ප්‍රසිද්ධ තැන්", m_hid:"සැඟවුණු තැන්", near:"මට ළඟම", foodnear:"මට ළඟම කෑම කඩ හොයන්න", reset:"සියල්ල පෙන්වන්න", count:n=>`ස්ථාන ${n}ක්`, empty:"ගැලපෙන ස්ථාන නැහැ. වෙනත් වචනයක් හෝ කාණ්ඩයක් උත්සාහ කරන්න.",
       dir:"📍 මඟ පෙන්වීම", food:"🍛 ළඟ කෑම කඩ", share:"🔗 බෙදාගන්න", add:"➕ ගමනට එක් කරන්න", added:"✓ ගමනේ තියෙනවා", copied:"Link එක copy කළා",
       locating:"ඔබ සිටින තැන සොයමින්…", locfail:"ඔබ සිටින තැන ගන්න බැරි වුණා. Phone එකේ location on කරලා නැවත උත්සාහ කරන්න.", you:"ඔබ මෙතැන", km:"කි.මී.",
       note:"\"යන්න හොඳම කාලය\" මෝසම් අනුව දළ මඟපෙන්වීමක් පමණයි; කාලගුණය අවුරුද්දෙන් අවුරුද්දට වෙනස් වෙනවා. ස්ථානවල පිහිටීම දළ වශයෙන් දක්වා ඇත. යන්න කලින් විවෘත වේලාවන් සහ ප්‍රවේශ ගාස්තු පරීක්ෂා කරන්න. \"මඟ පෙන්වීම\" Google Maps හරහා නිවැරදි ස්ථානයට ගෙන යයි.",
@@ -324,7 +436,7 @@ const T = {
       up:"ඉහළට", down:"පහළට", rm:"ඉවත් කරන්න",
       i_t:"ගමන් සිතියම app එක ගන්න", i_s:"Phone home screen එකට එකතු කරන්න. Internet නැති වෙලාවකත් විවෘත වෙනවා.", i_btn:"Install", install:"📲 App එක install කරන්න", i_ios:"Share බොත්තම ඔබලා “Add to Home Screen” තෝරන්න."},
   ta:{osmbtn:"இங்கே மேலும் இடங்கள்", osmzoomshort:"மேலும் இடங்களுக்கு பெரிதாக்கவும்", osmzoom:"மேலும் இடங்களைக் காட்ட வரைபடத்தை இன்னும் பெரிதாக்கவும்.", osmload:"தேடுகிறது…", osmfail:"இடங்களைப் பெற முடியவில்லை. சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.", osmsame:"இந்தப் பகுதியின் இடங்கள் ஏற்கனவே காட்டப்படுகின்றன. வரைபடத்தை வேறு இடத்துக்கு நகர்த்தி மீண்டும் அழுத்துங்கள்.", osmfound:n=>`மேலும் ${n} இடங்கள் கிடைத்தன`, osmnone:"இந்தப் பகுதியில் புதிய இடங்கள் இல்லை.", osmnote:"இந்தத் தகவல் OpenStreetMap சமூகத்திலிருந்து. நாங்கள் சரிபார்க்கவில்லை.", osmsrc:"OpenStreetMap", visited:"நான் சென்ற இடங்கள்", vyes:"⭐ சென்றுள்ளேன்", vno:"☆ சென்றிருந்தால் குறியிடுங்கள்", vof:(n,f,fn)=>`/ ${n} இடங்கள் · ${f}/${fn} உணவுகள் சுவைத்தேன்`, vempty:"இன்னும் குறியிட்ட இடங்கள் இல்லை. ஒரு இடத்தைத் தட்டி \"☆ சென்றிருந்தால் குறியிடுங்கள்\" அழுத்துங்கள்.", vshare:"🔗 என் மதிப்பெண்ணைப் பகிர்", vnote:"இந்தப் பட்டியல் உங்கள் போனில் மட்டுமே சேமிக்கப்படும்.", vtext:(n,t)=>`இலங்கையின் ${t} இடங்களில் ${n} இடங்களுக்குச் சென்றுள்ளேன்! 🇱🇰 நீங்கள் எத்தனைக்கு?`, photo:"Wikimedia", railon:"அழகிய ரயில் பாதைகள் காட்டப்படுகின்றன. ஒரு கோட்டைத் தட்டினால் விவரம் தெரியும்.", railnote:"பாதை நிலையங்களுக்கு இடையே தோராயமாகக் காட்டப்பட்டுள்ளது. ரயில் நேரங்களையும் டிக்கெட்டுகளையும் இலங்கை ரயில்வேயிடம் சரிபார்க்கவும்.", sos:"அவசர உதவி", tapcall:"அழைக்கத் தட்டுங்கள்", hosp:"அருகிலுள்ள மருத்துவமனை", pol:"அருகிலுள்ள காவல் நிலையம்", myloc:"என் இருப்பிடத்தை அனுப்பு", mylocmsg:"நான் இப்போது இங்கே இருக்கிறேன்:", hold:"📞 அழைக்க அழுத்திப் பிடியுங்கள்", holding:"தொடர்ந்து அழுத்திப் பிடியுங்கள்…", calling:"அழைக்கிறது", holdhelp:"தவறுதலாக அழைப்பு போகாமல் இருக்க, பொத்தானை ஒரு வினாடி அழுத்திப் பிடியுங்கள்.", cancel:"ரத்து செய்", sosnote:"எண்கள் இலங்கை காவல்துறை மற்றும் உத்தியோகபூர்வ மூலங்களின்படி. அவசரத்தில் முதலில் 119 அல்லது 1990 ஐ அழையுங்கள்.", best:"செல்ல சிறந்த காலம்", allyear:"ஆண்டு முழுவதும்", anym:"எந்த மாதமும்", goin:"பயணம்:", thism:"இந்த மாதம்", wxload:"வானிலை ஏற்றப்படுகிறது…", wxfail:"வானிலையைப் பெற முடியவில்லை (இணையம் தேவை).", wxsrc:"வானிலைத் தரவு:", today:"இன்று", tomorrow:"நாளை", title:"இலங்கை பயண வரைபடம்", sub:"சுற்றுலா இடங்களும் உள்ளூர் உணவும், ஒரே வரைபடத்தில்", q:"ஒரு இடத்தைத் தேடுங்கள்… (உ.தா: சீகிரியா, எல்ல)", all:"அனைத்தும்", alld:"அனைத்து மாவட்டங்களும்",
-      near:"எனக்கு அருகில்", foodnear:"எனக்கு அருகிலுள்ள உணவகங்கள்", reset:"அனைத்தையும் காட்டு", count:n=>`${n} இடங்கள்`, empty:"பொருந்தும் இடங்கள் இல்லை. வேறு சொல் அல்லது வகையை முயற்சிக்கவும்.",
+      wa_p:"இடம்",wa_a:"பகுதி",wa_m:"விவரம்",sug_t:"ஓர் இடத்தைச் சேர்க்க",sug_t2:"தவறான தகவலா?",sug_s:"உங்களுக்குத் தெரிந்த அழகான இடம் இங்கே இல்லையா? அல்லது ஏதேனும் தவறா? எங்களுக்குச் சொல்லுங்கள்.",sug_f1:"இடத்தின் பெயர்",sug_f2:"பகுதி / மாவட்டம் <span class=\"opt\">(விருப்பம்)</span>",sug_f3:"விவரம் <span class=\"opt\">(விருப்பம்)</span>",sug_f4:"உங்கள் பெயர் அல்லது WhatsApp எண் <span class=\"opt\">(விருப்பம்)</span>",sug_send:"அனுப்பு",sug_wa:"WhatsApp இல் சொல்லுங்கள்",sug_p:"உங்கள் விவரங்கள் யாருக்கும் வழங்கப்படாது.",sug_need:"இடத்தின் பெயரை எழுதுங்கள்.",sug_slow:"சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.",sug_sending:"அனுப்புகிறது…",sug_ok1:"நன்றி! 🙏",sug_ok2:"உங்கள் கருத்து கிடைத்தது. பார்த்து வரைபடத்தில் சேர்ப்போம்.",sug_fail:"அனுப்ப முடியவில்லை. இணையத்தைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",sug_fix:"⚠ இந்தத் தகவல் தவறா? சொல்லுங்கள்",sug_wamsg:"வணக்கம்! இலங்கை பயண வரைபடம் பற்றி:",add_s:"உங்களுக்குத் தெரிந்த இடம் இங்கே இல்லையா?",add_b:"✏️ ஓர் இடத்தைச் சேர்க்க",m_pop:"பிரபலமானவை", m_hid:"மறைந்த இடங்கள்", near:"எனக்கு அருகில்", foodnear:"எனக்கு அருகிலுள்ள உணவகங்கள்", reset:"அனைத்தையும் காட்டு", count:n=>`${n} இடங்கள்`, empty:"பொருந்தும் இடங்கள் இல்லை. வேறு சொல் அல்லது வகையை முயற்சிக்கவும்.",
       dir:"📍 வழி காட்டல்", food:"🍛 அருகில் உணவு", share:"🔗 பகிருங்கள்", add:"➕ பயணத்தில் சேர்", added:"✓ பயணத்தில் உள்ளது", copied:"இணைப்பு நகலெடுக்கப்பட்டது",
       locating:"உங்கள் இருப்பிடத்தைத் தேடுகிறது…", locfail:"உங்கள் இருப்பிடத்தைப் பெற முடியவில்லை. இருப்பிடத்தை இயக்கி மீண்டும் முயற்சிக்கவும்.", you:"நீங்கள் இங்கே", km:"கி.மீ.",
       note:"\"செல்ல சிறந்த காலம்\" பருவமழை அடிப்படையிலான தோராயமான வழிகாட்டி மட்டுமே; வானிலை ஆண்டுக்கு ஆண்டு மாறும். இடங்களின் அமைவிடம் தோராயமானது. செல்வதற்கு முன் திறக்கும் நேரங்களையும் நுழைவுக் கட்டணங்களையும் சரிபார்க்கவும். \"வழி காட்டல்\" Google Maps மூலம் சரியான இடத்துக்கு அழைத்துச் செல்லும்.",
@@ -334,7 +446,7 @@ const T = {
       up:"மேலே", down:"கீழே", rm:"நீக்கு",
       i_t:"பயண வரைபட ஆப்பைப் பெறுங்கள்", i_s:"போனின் முகப்புத் திரையில் சேர்க்கவும். இணையம் இல்லாதபோதும் திறக்கும்.", i_btn:"நிறுவு", install:"📲 ஆப்பை நிறுவுங்கள்", i_ios:"Share பொத்தானைத் தட்டி “Add to Home Screen” தேர்ந்தெடுங்கள்."},
   en:{osmbtn:"More places here", osmzoomshort:"Zoom in for more places", osmzoom:"Zoom in a bit more to show more places.", osmload:"Searching…", osmfail:"Couldn't load places. Please try again in a moment.", osmsame:"Places for this area are already shown. Move the map somewhere else and tap again.", osmfound:n=>`Found ${n} more places`, osmnone:"No new places found in this area.", osmnote:"This information comes from the OpenStreetMap community. We haven't checked it.", osmsrc:"OpenStreetMap", visited:"Places I've been", vyes:"⭐ I've been here", vno:"☆ Mark as visited", vof:(n,f,fn)=>`of ${n} places · tasted ${f}/${fn} foods`, vempty:"Nothing marked yet. Tap a place, then \"☆ Mark as visited\".", vshare:"🔗 Share my score", vnote:"This list is saved only on your phone.", vtext:(n,t)=>`I've been to ${n} of ${t} places in Sri Lanka! 🇱🇰 How many have you seen?`, photo:"Wikimedia", railon:"Showing scenic railways. Tap a line for details.", railnote:"Lines are drawn approximately between stations. Check train times and tickets with Sri Lanka Railways.", sos:"Emergency", tapcall:"Tap to call", hosp:"Nearest hospital", pol:"Nearest police station", myloc:"Send my location", mylocmsg:"I am here right now:", hold:"📞 Press and hold to call", holding:"Keep holding…", calling:"Calling", holdhelp:"To stop accidental calls, press and hold the button for about one second.", cancel:"Cancel", sosnote:"Numbers from Sri Lanka Police and official sources. In an emergency, call 119 or 1990 first.", best:"Best time to go", allyear:"All year", anym:"Any month", goin:"Going in", thism:"this month", wxload:"Loading weather…", wxfail:"Couldn't load the weather (needs internet).", wxsrc:"Weather data by", today:"Today", tomorrow:"Tomorrow", title:"Sri Lanka Travel Map", sub:"Places to visit and local food, on one map", q:"Search a place… (e.g. Sigiriya, Ella)", all:"All", alld:"All districts",
-      near:"Near me", foodnear:"Find food near me", reset:"Show all", count:n=>`${n} places`, empty:"No matching places. Try another word or category.",
+      wa_p:"Place",wa_a:"Area",wa_m:"Details",sug_t:"Suggest a place",sug_t2:"Something wrong?",sug_s:"Know a good place that is missing? Or spotted a mistake? Tell us and we will check it and add it.",sug_f1:"Name of the place",sug_f2:"Area / district <span class=\"opt\">(optional)</span>",sug_f3:"Details <span class=\"opt\">(optional)</span>",sug_f4:"Your name or WhatsApp number <span class=\"opt\">(optional)</span>",sug_send:"Send",sug_wa:"Tell us on WhatsApp",sug_p:"We never share your details with anyone.",sug_need:"Please write the name of the place.",sug_slow:"Please wait a moment and try again.",sug_sending:"Sending…",sug_ok1:"Thank you! 🙏",sug_ok2:"We got your suggestion and will check it before adding it to the map.",sug_fail:"Could not send. Check your internet and try again.",sug_fix:"⚠ Is this information wrong? Tell us",sug_wamsg:"Hello! About the Sri Lanka Travel Map:",add_s:"Is a place you know missing here?",add_b:"✏️ Suggest a place",m_pop:"Popular", m_hid:"Hidden gems", near:"Near me", foodnear:"Find food near me", reset:"Show all", count:n=>`${n} places`, empty:"No matching places. Try another word or category.",
       dir:"📍 Directions", food:"🍛 Food nearby", share:"🔗 Share", add:"➕ Add to trip", added:"✓ In your trip", copied:"Link copied",
       locating:"Finding your location…", locfail:"Couldn't get your location. Turn on location and try again.", you:"You are here", km:"km",
       note:"\"Best time to go\" is a rough monsoon-based guide; weather varies from year to year. Locations are approximate. Check opening times and entry fees before you go. \"Directions\" takes you to the exact place in Google Maps.",
@@ -344,7 +456,12 @@ const T = {
       up:"Move up", down:"Move down", rm:"Remove",
       i_t:"Get the Travel Map app", i_s:"Add it to your home screen. Opens even without internet.", i_btn:"Install", install:"📲 Install the app", i_ios:"Tap the Share button, then “Add to Home Screen”."}
 };
-let lang = "si", cat = "all", dist = "", q = "", me = null, selId = null, month = 0;
+let lang = "si", cat = "all", dist = "", q = "", me = null, selId = null, month = 0, mode = "pop";
+
+/* ===== SUGGESTIONS: paste your own links here ===== */
+const FORM_URL  = "https://formspree.io/f/YOUR_FORM_ID";   // Formspree endpoint
+const WA_NUMBER = "";                                      // e.g. "94771234567" (no + and no 0). Leave "" to hide.
+const sugOn = () => !FORM_URL.includes("YOUR_FORM_ID");
 const $ = id => document.getElementById(id);
 const store = { get:k=>{try{return localStorage.getItem(k)}catch(e){return null}}, set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}} };
 const BY = Object.fromEntries(PLACES.map(p => [p.id, p]));
@@ -441,7 +558,52 @@ function renderTrip(){
 $("tripRoute").addEventListener("click", () => { if (trip.length > 10) toast(T[lang].tmax); });
 const openTrip = () => { renderTrip(); $("trip").classList.add("open"); $("scrim").classList.add("open"); };
 const closeTrip = () => { $("trip").classList.remove("open"); $("scrim").classList.remove("open"); };
-$("tripBtn").onclick = openTrip; $("tripClose").onclick = closeTrip; $("scrim").onclick = () => { closeTrip(); closeVis(); };
+$("tripBtn").onclick = openTrip; $("tripClose").onclick = closeTrip;
+$("scrim").onclick = () => { closeTrip(); closeVis(); closeSug(); };
+
+/* ===== suggest a place / report a mistake ===== */
+let sugAt = 0;
+function openSug(id){
+  if (!sugOn()) return;
+  const p = id && BY[id];
+  $("sugForm").hidden = false; $("sugFoot").hidden = false;
+  const old = document.querySelector(".sug-ok"); if (old) old.remove();
+  $("sgErr").hidden = true;
+  $("sgName").value = p ? name(p) : "";
+  $("sgArea").value = p ? dname(p.d) : "";
+  $("sgMsg").value = ""; $("sgFrom").value = ""; $("sgTrap").value = "";
+  $("sug").querySelector("b").textContent = T[lang][p ? "sug_t2" : "sug_t"];
+  sugAt = Date.now();
+  $("sgWa").hidden = !WA_NUMBER;
+  $("sug").classList.add("open"); $("scrim").classList.add("open");
+  setTimeout(() => $(p ? "sgMsg" : "sgName").focus(), 300);
+}
+const closeSug = () => { $("sug").classList.remove("open"); $("scrim").classList.remove("open"); };
+window.openSug = openSug;
+$("sugClose").onclick = closeSug;
+function waText(){
+  const L = T[lang], add = (k, v) => v ? "\n" + L[k] + ": " + v : "";
+  return L.sug_wamsg + add("wa_p", $("sgName").value.trim()) + add("wa_a", $("sgArea").value.trim()) + add("wa_m", $("sgMsg").value.trim());
+}
+$("sgWa").onclick = e => { e.preventDefault(); window.open("https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(waText()), "_blank", "noopener"); };
+$("sgSend").onclick = async () => {
+  const nm = $("sgName").value.trim();
+  const err = t => { $("sgErr").textContent = t; $("sgErr").hidden = false; };
+  if (!nm) { err(T[lang].sug_need); $("sgName").focus(); return; }
+  if ($("sgTrap").value) { closeSug(); return; }
+  if (Date.now() - sugAt < 3000) { err(T[lang].sug_slow); return; }
+  $("sgErr").hidden = true;
+  const b = $("sgSend"); b.disabled = true; b.textContent = T[lang].sug_sending;
+  try {
+    const r = await fetch(FORM_URL, {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"},
+      body: JSON.stringify({place:nm, area:$("sgArea").value.trim(), message:$("sgMsg").value.trim(),
+        contact:$("sgFrom").value.trim(), lang, page:location.href})});
+    if (!r.ok) throw 0;
+    $("sugForm").hidden = true; $("sugFoot").hidden = true;
+    $("sug").insertAdjacentHTML("beforeend", `<div class="sug-ok"><b>${T[lang].sug_ok1}</b>${T[lang].sug_ok2}</div>`);
+  } catch (e) { err(T[lang].sug_fail); }
+  b.disabled = false; b.textContent = T[lang].sug_send;
+};
 $("visBtn").onclick = openVis; $("visClose").onclick = closeVis;
 $("tripClear").onclick = () => { if (confirm(T[lang].tconfirm)){ trip = []; saveTrip(); refreshAll(); } };
 $("tripShare").onclick = () => {
@@ -482,7 +644,7 @@ const cluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadiu
 const markers = {};
 const POPOPT = innerWidth <= 820 ? {autoPanPaddingTopLeft:[10,10], autoPanPaddingBottomRight:[10,10]} : {autoPanPaddingTopLeft:[56,120], autoPanPaddingBottomRight:[20,24]};
 const pinIcon = p => { const k = CATS[p.c], n = trip.indexOf(p.id);
-  return L.divIcon({className:"", html:`<div class="pin${p.id===selId?" sel":""}" data-id="${p.id}" style="background:${k.c}">${k.e}${n>=0?`<span class="no">${n+1}</span>`:""}</div>`, iconSize:[30,30], iconAnchor:[15,15], popupAnchor:[0,-14]}); };
+  return L.divIcon({className:"", html:`<div class="pin${p.h?" hid":""}${p.id===selId?" sel":""}" data-id="${p.id}" style="background:${k.c}">${k.e}${n>=0?`<span class="no">${n+1}</span>`:""}</div>`, iconSize:[30,30], iconAnchor:[15,15], popupAnchor:[0,-14]}); };
 PLACES.forEach(p => { markers[p.id] = L.marker([p.lat, p.lng], {icon:pinIcon(p), title:p.en}).on("click", () => select(p.id, false)).bindPopup(() => popup(p), POPOPT); });
 map.on("popupopen", e => { const el = e.popup.getElement().querySelector(".wx"); if (el){ loadWx(el.dataset.id); loadPhoto(el.dataset.id); } });
 function drawTripLine(){
@@ -530,7 +692,6 @@ railCtl.addTo(map);
 // ---------------- more places from OpenStreetMap (on demand, zoomed-in areas only) ----------------
 const OSM_MINZOOM = 12, OSM_MAX = 300;
 const OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
-const RV = "https://ravana-lanka.pages.dev/"; // Ravana website address - change here if it changes
 Object.assign(T.si, {rvc:"රාවණා කතාව", rv:"📖 රාවණා කතාව කියවන්න"});
 Object.assign(T.ta, {rvc:"இராவணன் கதை", rv:"📖 இராவணன் கதையைப் படிக்க"});
 Object.assign(T.en, {rvc:"Ravana story", rv:"📖 Read the Ravana story"});
@@ -768,7 +929,7 @@ function popup(p){
       <a class="btn btn-amber" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("restaurants near " + p.en + ", Sri Lanka")}">${T[lang].food}</a>
       <button class="btn ${inTrip ? "btn-teal" : "btn-light"}" onclick="popTrip('${p.id}')">${inTrip ? T[lang].added : T[lang].add}</button>
       <button class="btn btn-light" onclick="share('${p.id}')">${T[lang].share}</button>
-    </div></div>`;
+    </div>${sugOn() ? `<button class="popfix" onclick="openSug('${p.id}')">${T[lang].sug_fix}</button>` : ""}</div>`;
 }
 window.popTrip = id => setTimeout(() => toggleTrip(id), 0);
 window.share = id => {
@@ -783,7 +944,7 @@ const hav = (a, b) => { const R = 6371, r = Math.PI/180, dLa = (b.lat-a.lat)*r, 
 const norm = s => s.toLowerCase().normalize("NFC");
 function filtered(){
   const qq = norm(q.trim());
-  let r = PLACES.filter(p => (cat === "all" || p.c === cat || (cat === "ravana" && p.rv)) && (!dist || p.d === dist) && (!month || p.best.includes(month)) &&
+  let r = PLACES.filter(p => (cat === "ravana" ? !!p.rv : (mode === "all" || (mode === "hid") === !!p.h) && (cat === "all" || p.c === cat)) && (!dist || p.d === dist) && (!month || p.best.includes(month)) &&
     (!qq || norm([p.en,p.si,p.ta,p.d,DN.si[p.d],DN.ta[p.d],p.den,p.dsi,p.dta].join(" ")).includes(qq)));
   if (me) r = r.map(p => ({...p, km:hav(me, p)})).sort((a,b) => a.km - b.km);
   return r;
@@ -798,6 +959,8 @@ function render(){
       <div class="side"><button class="add${inT?" in":""}" data-add="${p.id}" aria-label="${inT?T[lang].added:T[lang].add}" title="${inT?T[lang].added:T[lang].add}">${inT?"✓":"+"}</button>
       ${p.km != null ? `<span class="km">${p.km < 10 ? p.km.toFixed(1) : Math.round(p.km)} ${T[lang].km}</span>` : ""}</div></div>`; }).join("")
     : `<div class="empty">${T[lang].empty}</div>`;
+  if (sugOn()) $("list").insertAdjacentHTML("beforeend",
+    `<div class="addcard"><p>${T[lang].add_s}</p><button class="btn btn-light" onclick="openSug()">${T[lang].add_b}</button></div>`);
   $("list").querySelectorAll(".card").forEach(c => { c.onclick = e => { if (e.target.closest(".add")) return; select(c.dataset.id, true); }; c.onkeydown = e => { if (e.key === "Enter") select(c.dataset.id, true); }; });
   $("list").querySelectorAll(".add").forEach(b => b.onclick = () => toggleTrip(b.dataset.add));
 }
@@ -825,6 +988,14 @@ function select(id, fly){
 map.on("popupclose", () => { if (keepPopup) return; selId = null; document.querySelectorAll(".pin.sel,.card.sel").forEach(el => el.classList.remove("sel")); history.replaceState(null, "", location.pathname + location.search); });
 map.on("zoomend moveend", () => document.querySelectorAll(".pin").forEach(el => el.classList.toggle("sel", el.dataset.id === selId)));
 
+function buildMode(){
+  const nPop = PLACES.filter(p => !p.h).length, nHid = PLACES.filter(p => p.h).length;
+  $("modesw").innerHTML = [["pop", T[lang].m_pop, nPop], ["hid", T[lang].m_hid, nHid]]
+    .map(([m, t, n]) => `<button data-m="${m}" class="${mode===m?"on":""}">${t} <span>${n}</span></button>`).join("");
+  $("modesw").querySelectorAll("button").forEach(b => b.onclick = () => {
+    mode = b.dataset.m; buildMode(); render(); renderOsm();
+  });
+}
 function buildChips(){
   $("chips").innerHTML = `<button class="chip${cat==="all"?" on":""}" data-c="all">${T[lang].all}</button>` +
     Object.entries(CATS).map(([k,v]) => `<button class="chip${cat===k?" on":""}" data-c="${k}"><i style="background:${v.c}"></i>${v.e} ${v[lang]}</button>`).join("") +
@@ -868,13 +1039,13 @@ $("foodNear").href = "https://www.google.com/maps/search/?api=1&query=" + encode
 // ---------------- language ----------------
 function setLang(l){
   lang = l; document.documentElement.lang = l; store.set("lang", l);
-  document.querySelectorAll("[data-i]").forEach(el => { const v = T[l][el.dataset.i]; if (typeof v === "string") el.textContent = v; });
+  document.querySelectorAll("[data-i]").forEach(el => { const v = T[l][el.dataset.i]; if (typeof v === "string") { if (v.includes("<")) el.innerHTML = v; else el.textContent = v; } });
   document.title = T[l].title + (l === "en" ? " · ලංකා ගමන් සිතියම" : " · Sri Lanka Travel Map");
   $("q").placeholder = T[l].q;
   document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.l === l));
   $("legend").innerHTML = Object.values(CATS).map(v => `<span><i style="background:${v.c}">${v.e}</i>${v[l]}</span>`).join("");
   if (isIOS && !standalone) $("inst_s").textContent = T[l].i_ios;
-  buildChips(); buildDist(); buildMonth(); refreshAll();
+  buildMode(); buildChips(); buildDist(); buildMonth(); refreshAll();
   distMarkers.forEach(m => m.setIcon(labelIcon(m.dn))); showLabels();
   renderVis(); if (railOn){ drawRail(); } setMoreLabel(); if ($("sos").classList.contains("open") && !$("sosList").hidden) renderSos();
 }
